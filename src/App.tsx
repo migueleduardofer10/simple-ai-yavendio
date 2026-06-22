@@ -399,7 +399,7 @@ function Hero() {
   return (
     <section
       id="inicio"
-      className="relative flex min-h-[100dvh] flex-col items-center overflow-hidden bg-brio-ink-dark pt-32 text-center"
+      className="relative flex min-h-[100dvh] flex-col items-center justify-center overflow-hidden bg-brio-ink-dark pb-12 pt-28 text-center"
     >
       {/* Fondo: degradado + glows + textura */}
       <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
@@ -449,7 +449,7 @@ function Hero() {
         </div>
 
         {/* Mockup: bandeja tipo WhatsApp atendida por IA */}
-        <div className="reveal is-visible relative mt-16 w-full max-w-4xl pb-20">
+        <div className="reveal is-visible relative mt-14 w-full max-w-5xl">
           <div className="overflow-hidden rounded-2xl border border-white/10 bg-white text-left shadow-hard-lg">
             {/* barra superior */}
             <div className="flex items-center gap-1.5 border-b border-brio-border bg-brio-muted px-4 py-3">
@@ -524,13 +524,56 @@ function Hero() {
           </div>
 
           {/* badge flotante de pedidos */}
-          <div className="absolute -left-2 bottom-28 hidden items-center gap-2 rounded-xl border border-white/10 bg-brio-ink px-3.5 py-2.5 shadow-hard-lg sm:flex">
+          <div className="absolute -left-3 bottom-10 hidden items-center gap-2 rounded-xl border border-white/10 bg-brio-ink px-3.5 py-2.5 shadow-hard-lg sm:flex">
             <span className="flex h-7 w-7 items-center justify-center rounded-full bg-brio-terra/20 text-brio-terra">
               <Icon.Check className="h-4 w-4" />
             </span>
             <span className="leading-tight">
               <span className="block text-sm font-extrabold text-white">+38 pedidos</span>
               <span className="block text-[10px] text-white/50">atendidos sin que muevas un dedo</span>
+            </span>
+          </div>
+
+          {/* badge flotante de stock */}
+          <div className="absolute -left-3 top-16 hidden items-center gap-2 rounded-xl border border-white/10 bg-brio-ink px-3.5 py-2.5 shadow-hard-lg lg:flex">
+            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-brio-terra/20 text-brio-terra">
+              <Icon.Store className="h-4 w-4" />
+            </span>
+            <span className="leading-tight">
+              <span className="block text-sm font-extrabold text-white">Stock bajo</span>
+              <span className="block text-[10px] text-white/50">quedan 3 · te avisamos a tiempo</span>
+            </span>
+          </div>
+
+          {/* badge flotante de respuesta */}
+          <div className="absolute -right-3 bottom-12 hidden items-center gap-2 rounded-xl border border-white/10 bg-brio-ink px-3.5 py-2.5 shadow-hard-lg lg:flex">
+            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-brio-terra/20 text-brio-terra">
+              <Icon.Sparkles className="h-4 w-4" />
+            </span>
+            <span className="leading-tight">
+              <span className="block text-sm font-extrabold text-white">Responde sola</span>
+              <span className="block text-[10px] text-white/50">en segundos, 24/7</span>
+            </span>
+          </div>
+        </div>
+
+        {/* Franja de canales — "funciona donde ya vendes" */}
+        <div className="reveal is-visible mt-12 flex flex-col items-center gap-4">
+          <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/35">
+            Funciona donde tu negocio ya vende
+          </span>
+          <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-sm font-bold text-white/55">
+            <span className="flex items-center gap-2">
+              <Icon.Whatsapp className="h-4 w-4 text-brio-terra" /> WhatsApp
+            </span>
+            <span className="flex items-center gap-2">
+              <span className="h-1.5 w-1.5 rounded-full bg-brio-terra" /> Instagram
+            </span>
+            <span className="flex items-center gap-2">
+              <span className="h-1.5 w-1.5 rounded-full bg-brio-terra" /> Excel
+            </span>
+            <span className="flex items-center gap-2">
+              <span className="h-1.5 w-1.5 rounded-full bg-brio-terra" /> Google Sheets
             </span>
           </div>
         </div>
