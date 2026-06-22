@@ -297,7 +297,7 @@ function Logo({ dark = false }: { dark?: boolean }) {
       </span>
       <span className={`text-lg font-extrabold tracking-tight ${dark ? 'text-white' : 'text-brio-ink'}`}>
         {BRAND.short}
-        <span className="text-gradient"> AI</span>
+        <span className={dark ? 'text-gradient' : 'text-brio-plum'}> AI</span>
       </span>
     </Link>
   )
@@ -317,14 +317,14 @@ function Header() {
   const overHero = pathname === '/' && !scrolled
 
   return (
-    <header
-      className={`fixed top-0 inset-x-0 z-50 py-3.5 transition-colors duration-300 ${
-        overHero
-          ? 'bg-transparent'
-          : 'border-b border-brio-border/70 bg-white/85 backdrop-blur-md'
-      }`}
-    >
-      <div className="container-x flex items-center justify-between">
+    <header className="fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:pt-4">
+      <div
+        className={`container-x flex items-center justify-between rounded-full border px-4 py-2.5 transition-colors duration-300 sm:px-5 ${
+          overHero
+            ? 'border-white/10 bg-white/[0.05] backdrop-blur-md'
+            : 'border-brio-border bg-white/80 shadow-hard backdrop-blur-md'
+        }`}
+      >
         <Logo dark={overHero} />
 
         <nav className="hidden md:flex items-center gap-8">
@@ -338,10 +338,10 @@ function Header() {
                   isActive
                     ? overHero
                       ? 'text-brio-terra'
-                      : 'text-brio-terra-dark'
+                      : 'text-brio-plum'
                     : overHero
                       ? 'text-white/80 hover:text-brio-terra'
-                      : 'text-brio-ink/75 hover:text-brio-terra-dark'
+                      : 'text-brio-ink/75 hover:text-brio-plum'
                 }`
               }
             >
@@ -377,7 +377,7 @@ function Header() {
                 onClick={() => setOpen(false)}
                 className={({ isActive }) =>
                   `block rounded-xl px-3 py-2.5 text-sm font-medium hover:bg-brio-muted ${
-                    isActive ? 'text-brio-terra-dark' : 'text-brio-ink/80'
+                    isActive ? 'text-brio-plum' : 'text-brio-ink/80'
                   }`
                 }
               >
@@ -407,7 +407,7 @@ function Hero() {
           className="absolute inset-0"
           style={{
             background:
-              'radial-gradient(120% 80% at 50% -10%, rgba(15,227,139,0.18), transparent 60%), radial-gradient(80% 60% at 80% 20%, rgba(15,227,139,0.10), transparent 60%)',
+              'radial-gradient(120% 90% at 50% -10%, rgba(138,46,146,0.45), transparent 60%), radial-gradient(80% 60% at 85% 15%, rgba(245,225,78,0.10), transparent 55%), radial-gradient(70% 60% at 10% 90%, rgba(176,60,160,0.28), transparent 60%)',
           }}
         />
         <div className="absolute inset-0 texture-dots-dark opacity-50" />
@@ -687,7 +687,7 @@ function Process() {
               <span className="pointer-events-none absolute -top-3 right-3 select-none text-7xl font-bold leading-none text-brio-terra/15">
                 {p.n}
               </span>
-              <span className="mb-5 flex h-9 w-9 items-center justify-center rounded-full bg-brio-terra/15 text-sm font-extrabold text-brio-terra-dark">
+              <span className="mb-5 flex h-9 w-9 items-center justify-center rounded-full bg-brio-terra/15 text-sm font-extrabold text-brio-plum">
                 {p.n}
               </span>
               <h3 className="mb-2 text-lg font-bold text-brio-ink">{p.title}</h3>
@@ -763,7 +763,7 @@ function BeforeAfter() {
 
           {/* Flecha al centro (solo desktop) */}
           <div aria-hidden className="group absolute left-1/2 top-1/2 z-10 hidden -translate-x-1/2 -translate-y-1/2 cursor-pointer lg:flex">
-            <span className="flex h-11 w-11 items-center justify-center rounded-full border border-brio-border bg-white text-brio-terra-dark shadow-hard transition-all duration-300 group-hover:scale-110 group-hover:border-brio-terra group-hover:bg-brio-terra group-hover:text-brio-ink">
+            <span className="flex h-11 w-11 items-center justify-center rounded-full border border-brio-border bg-white text-brio-plum shadow-hard transition-all duration-300 group-hover:scale-110 group-hover:border-brio-terra group-hover:bg-brio-terra group-hover:text-brio-ink">
               <Icon.ArrowRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-0.5" />
             </span>
           </div>
@@ -810,7 +810,7 @@ function Training() {
         <div className="grid gap-4 sm:grid-cols-2">
           {training.map((m, i) => (
             <div key={i} className="reveal rounded-[20px] border border-brio-border bg-white p-6 shadow-hard-sm" style={{ transitionDelay: `${i * 70}ms` }}>
-              <span className="mb-4 flex h-9 w-9 items-center justify-center rounded-full bg-brio-terra/15 text-brio-terra-dark">
+              <span className="mb-4 flex h-9 w-9 items-center justify-center rounded-full bg-brio-terra/15 text-brio-plum">
                 <Icon.Sparkles className="h-4 w-4" />
               </span>
               <h3 className="mb-2 text-base font-bold text-brio-ink">{m.title}</h3>
@@ -923,14 +923,14 @@ function Team() {
             <div key={f.name} className="reveal flex flex-col items-center rounded-[20px] border border-brio-border bg-white p-8 text-center shadow-hard-sm" style={{ transitionDelay: `${i * 100}ms` }}>
               <FounderAvatar photo={f.photo} initials={f.initials} ring={f.ring} />
               <h3 className="mt-6 text-xl font-bold text-brio-ink">{f.name}</h3>
-              <p className="mt-1 font-mono text-xs font-medium uppercase tracking-[0.14em] text-brio-terra-dark">
+              <p className="mt-1 font-mono text-xs font-medium uppercase tracking-[0.14em] text-brio-plum">
                 {f.role}
               </p>
               <p className="mt-4 max-w-xs text-sm leading-relaxed text-brio-slate">{f.bio}</p>
               <a
                 href="#"
                 aria-label={`LinkedIn de ${f.name}`}
-                className="mt-5 inline-flex h-9 w-9 items-center justify-center rounded-full border border-brio-border text-brio-slate/60 transition-colors hover:border-brio-terra hover:text-brio-terra-dark"
+                className="mt-5 inline-flex h-9 w-9 items-center justify-center rounded-full border border-brio-border text-brio-slate/60 transition-colors hover:border-brio-terra hover:text-brio-plum"
               >
                 <Icon.Linkedin className="h-4 w-4" />
               </a>
@@ -962,7 +962,7 @@ function Faq() {
             >
               <div className="flex items-center gap-3 px-5 py-4">
                 <h3 className="flex-1 font-bold text-brio-ink">{f.q}</h3>
-                <Icon.ChevronDown className="h-5 w-5 flex-shrink-0 text-brio-slate/50 transition-transform duration-300 group-hover:rotate-180 group-hover:text-brio-terra-dark" />
+                <Icon.ChevronDown className="h-5 w-5 flex-shrink-0 text-brio-slate/50 transition-transform duration-300 group-hover:rotate-180 group-hover:text-brio-plum" />
               </div>
               {/* grid-rows 0fr → 1fr anima la altura al hacer hover */}
               <div className="grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-out group-hover:grid-rows-[1fr]">
@@ -1045,7 +1045,7 @@ function ComingSoon({ title }: { title: string }) {
   return (
     <main className="section-padding bg-brio-bone">
       <div className="container-x flex min-h-[70vh] flex-col items-center justify-center pt-20 text-center">
-        <span className="mb-5 inline-flex items-center gap-2 rounded-full bg-brio-terra/15 px-3 py-1 text-xs font-bold uppercase tracking-[0.14em] text-brio-terra-dark">
+        <span className="mb-5 inline-flex items-center gap-2 rounded-full bg-brio-terra/15 px-3 py-1 text-xs font-bold uppercase tracking-[0.14em] text-brio-plum">
           <span className="h-1.5 w-1.5 rounded-full bg-brio-terra animate-pulse" />
           Próximamente
         </span>

@@ -27,9 +27,9 @@
 }
 
 @layer utilities {
-  /* Degradado de texto estilo Platzi: verde → turquesa → cyan */
+  /* Degradado de texto estilo Yavendío: amarillo → dorado (sobre fondo oscuro) */
   .text-gradient {
-    background-image: linear-gradient(100deg, #0fe38b 0%, #10e08f 50%, #18d8b6 80%, #22cdd6 100%);
+    background-image: linear-gradient(100deg, #f5e14e 0%, #fbe886 55%, #f2c84a 100%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -38,7 +38,7 @@
   /* Subtle dotted texture used behind light sections */
   .texture-dots {
     background-image: radial-gradient(
-      rgba(14, 17, 23, 0.05) 1px,
+      rgba(28, 10, 34, 0.05) 1px,
       transparent 1px
     );
     background-size: 22px 22px;
@@ -53,11 +53,11 @@
     background-size: 22px 22px;
   }
 
-  /* Soft radial glows — Platzi green */
+  /* Soft radial glows — morado / amarillo estilo Yavendío */
   .glow-radial-terra {
     background: radial-gradient(
       closest-side,
-      rgba(15, 227, 139, 0.24),
+      rgba(138, 46, 146, 0.34),
       transparent
     );
   }
@@ -65,7 +65,7 @@
   .glow-radial-gold {
     background: radial-gradient(
       closest-side,
-      rgba(15, 227, 139, 0.16),
+      rgba(245, 225, 78, 0.16),
       transparent
     );
   }
@@ -73,7 +73,7 @@
   .glow-radial-jade {
     background: radial-gradient(
       closest-side,
-      rgba(15, 227, 139, 0.2),
+      rgba(176, 60, 160, 0.26),
       transparent
     );
   }
