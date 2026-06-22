@@ -6,12 +6,12 @@ import { BrowserRouter, Routes, Route, NavLink, Link, useLocation } from 'react-
 /*  Marca — cambia el nombre / contacto en UN solo lugar               */
 /* ------------------------------------------------------------------ */
 const BRAND = {
-  name: 'Negocio Simple AI',
-  short: 'Negocio Simple',
+  name: 'Simple AI',
+  short: 'Simple',
   tagline: 'IA simple para tu negocio',
   whatsapp:
     'https://wa.me/51991735542?text=Hola%2C%20quiero%20revisar%20mi%20negocio',
-  email: 'hola@negociosimple.ai',
+  email: 'hola@simple.ai',
 }
 
 /* ------------------------------------------------------------------ */
@@ -297,7 +297,7 @@ function Logo({ dark = false }: { dark?: boolean }) {
       </span>
       <span className={`text-lg font-extrabold tracking-tight ${dark ? 'text-white' : 'text-brio-ink'}`}>
         {BRAND.short}
-        <span className="text-brio-terra"> AI</span>
+        <span className="text-gradient"> AI</span>
       </span>
     </Link>
   )
@@ -427,9 +427,7 @@ function Hero() {
         >
           Llevamos los negocios
           <br />a la{' '}
-          <span className="bg-gradient-to-r from-brio-terra to-brio-terra-light bg-clip-text text-transparent">
-            era de la IA
-          </span>
+          <span className="text-gradient">era de la IA</span>
         </h1>
 
         <p className="reveal is-visible mx-auto mt-7 max-w-xl text-base leading-relaxed text-white/65 md:text-lg">
@@ -457,7 +455,7 @@ function Hero() {
               <span className="h-2.5 w-2.5 rounded-full bg-brio-border" />
               <span className="h-2.5 w-2.5 rounded-full bg-brio-border" />
               <span className="mx-auto rounded-md bg-white px-3 py-0.5 text-[11px] font-medium text-brio-slate">
-                app.negociosimple.ai
+                app.simple.ai
               </span>
             </div>
 
@@ -625,7 +623,7 @@ function Simplicity() {
           <Pill dark>Lo simple gana</Pill>
           <h2 className="mt-5 font-display font-extrabold leading-[1.1] text-white" style={{ fontSize: 'clamp(1.875rem, 4.5vw, 3.25rem)' }}>
             No todo necesita un sistema. A veces solo hay que{' '}
-            <span className="text-brio-terra">ordenar bien lo que ya usas.</span>
+            <span className="text-gradient">ordenar bien lo que ya usas.</span>
           </h2>
           <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-white/65 md:text-lg">
             Si una hoja de cálculo resuelve, la mejoramos. Si WhatsApp es tu canal de
@@ -1003,6 +1001,22 @@ function Footer() {
   )
 }
 
+// Botón flotante de WhatsApp (fijo en toda la web, como Platzi).
+function FloatingWhatsApp() {
+  return (
+    <a
+      href={BRAND.whatsapp}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Escríbenos por WhatsApp"
+      className="group fixed bottom-6 right-6 z-50 flex h-16 w-16 items-center justify-center rounded-full bg-[#25D366] text-white shadow-hard-lg transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#1EBE57]"
+    >
+      <span className="absolute inset-0 rounded-full bg-[#25D366]/40 animate-ping" style={{ animationDuration: '2.5s' }} />
+      <Icon.Whatsapp className="relative h-9 w-9" />
+    </a>
+  )
+}
+
 /* ------------------------------------------------------------------ */
 /*  Páginas                                                            */
 /* ------------------------------------------------------------------ */
@@ -1070,6 +1084,7 @@ export default function App() {
           <Route path="*" element={<ComingSoon title="Página no encontrada" />} />
         </Routes>
         <Footer />
+        <FloatingWhatsApp />
       </div>
     </BrowserRouter>
   )
