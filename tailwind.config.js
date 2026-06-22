@@ -5,21 +5,24 @@ export default {
     extend: {
       colors: {
         brio: {
-          ink: '#1B1A2E',
-          'ink-dark': '#12111F',
-          bone: '#F4EFE6',
-          paper: '#FBF8F2',
-          cream: '#EAE3D6',
-          muted: '#F0EADF',
-          border: '#E2DACB',
-          slate: '#6B6478',
-          terra: '#DD5C3A',
-          'terra-dark': '#C44A2C',
-          'terra-light': '#EE7D5E',
-          jade: '#1F9D7A',
-          'jade-light': '#3CB996',
-          gold: '#E0A43B',
-          'gold-dark': '#C68A26',
+          // Superficies oscuras (secciones "spotlight" estilo Platzi)
+          ink: '#0E1117',
+          'ink-dark': '#070A0F',
+          // Superficies claras
+          bone: '#FFFFFF',
+          paper: '#FFFFFF',
+          cream: '#F2F5F8',
+          muted: '#F6F8FA',
+          border: '#E4E9EF',
+          slate: '#56606E',
+          // Verde Platzi (esmeralda brillante). Cambia SOLO estos hex si quieres otro tono.
+          terra: '#0FE38B',
+          'terra-dark': '#0AA968',
+          'terra-light': '#5CF2B5',
+          jade: '#0FE38B',
+          'jade-light': '#5CF2B5',
+          gold: '#0AA968',
+          'gold-dark': '#089456',
         },
       },
       fontFamily: {
@@ -28,10 +31,10 @@ export default {
         mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
       },
       boxShadow: {
-        hard: '#1B1A2E 0px 1.5px 0px',
-        'hard-lg':
-          '#1B1A2E 0px 1.5px 0px, rgba(27, 26, 46, 0.28) 0px 30px 60px -28px',
-        'hard-sm': 'rgba(27, 26, 46, 0.06) 0px 1.5px 0px',
+        // Sombras planas estilo Platzi
+        hard: '0 1px 2px rgba(14, 17, 23, 0.06)',
+        'hard-lg': '0 24px 50px -24px rgba(14, 17, 23, 0.30)',
+        'hard-sm': '0 1px 2px rgba(14, 17, 23, 0.04)',
       },
       keyframes: {
         float: {

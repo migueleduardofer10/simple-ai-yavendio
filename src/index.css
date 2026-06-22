@@ -27,20 +27,29 @@
 }
 
 @layer utilities {
-  /* Subtle dotted texture used behind warm sections */
+  /* Subtle dotted texture used behind light sections */
   .texture-dots {
     background-image: radial-gradient(
-      rgba(27, 26, 46, 0.06) 1px,
+      rgba(14, 17, 23, 0.05) 1px,
       transparent 1px
     );
     background-size: 22px 22px;
   }
 
-  /* Soft radial glows that float in hero / decorative areas */
+  /* Same texture but light dots, for dark "spotlight" sections */
+  .texture-dots-dark {
+    background-image: radial-gradient(
+      rgba(255, 255, 255, 0.05) 1px,
+      transparent 1px
+    );
+    background-size: 22px 22px;
+  }
+
+  /* Soft radial glows — Platzi green */
   .glow-radial-terra {
     background: radial-gradient(
       closest-side,
-      rgba(221, 92, 58, 0.22),
+      rgba(15, 227, 139, 0.24),
       transparent
     );
   }
@@ -48,7 +57,7 @@
   .glow-radial-gold {
     background: radial-gradient(
       closest-side,
-      rgba(224, 164, 59, 0.2),
+      rgba(15, 227, 139, 0.16),
       transparent
     );
   }
@@ -56,7 +65,7 @@
   .glow-radial-jade {
     background: radial-gradient(
       closest-side,
-      rgba(31, 157, 122, 0.18),
+      rgba(15, 227, 139, 0.2),
       transparent
     );
   }
