@@ -1,0 +1,81 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-brio-bone text-brio-ink font-sans antialiased;
+  }
+}
+
+@layer components {
+  .container-x {
+    @apply container mx-auto px-4 sm:px-6 md:px-10 lg:px-16;
+  }
+
+  .section-padding {
+    @apply py-20 md:py-28;
+  }
+
+  .text-fluid-section {
+    font-size: clamp(1.75rem, 5vw, 3rem);
+  }
+}
+
+@layer utilities {
+  /* Subtle dotted texture used behind warm sections */
+  .texture-dots {
+    background-image: radial-gradient(
+      rgba(27, 26, 46, 0.06) 1px,
+      transparent 1px
+    );
+    background-size: 22px 22px;
+  }
+
+  /* Soft radial glows that float in hero / decorative areas */
+  .glow-radial-terra {
+    background: radial-gradient(
+      closest-side,
+      rgba(221, 92, 58, 0.22),
+      transparent
+    );
+  }
+
+  .glow-radial-gold {
+    background: radial-gradient(
+      closest-side,
+      rgba(224, 164, 59, 0.2),
+      transparent
+    );
+  }
+
+  .glow-radial-jade {
+    background: radial-gradient(
+      closest-side,
+      rgba(31, 157, 122, 0.18),
+      transparent
+    );
+  }
+
+  .card-hover {
+    @apply transition-transform duration-300;
+  }
+  .card-hover:hover {
+    transform: translateY(-4px);
+  }
+
+  /* Scroll reveal — JS adds .is-visible when element enters viewport */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+  }
+  .reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
