@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import type { ReactNode } from 'react'
+import { BrowserRouter, Routes, Route, NavLink, Link, useLocation } from 'react-router-dom'
 
 /* ------------------------------------------------------------------ */
 /*  Brand — change the name / contact in ONE place                     */
@@ -73,6 +74,11 @@ const Icon = {
       <path d="M20 6 9 17l-5-5" />
     </svg>
   ),
+  ChevronDown: ({ className }: IconProps) => (
+    <svg viewBox="0 0 24 24" className={className} {...stroke}>
+      <path d="m6 9 6 6 6-6" />
+    </svg>
+  ),
   Mail: ({ className }: IconProps) => (
     <svg viewBox="0 0 24 24" className={className} {...stroke}>
       <rect x="2" y="4" width="20" height="16" rx="2" />
@@ -114,6 +120,25 @@ function useScrollReveal() {
 }
 
 /* ------------------------------------------------------------------ */
+/*  Navegación — cada item es una RUTA (no una sección de Inicio)       */
+/* ------------------------------------------------------------------ */
+const NAV = [
+  { label: 'Inicio', to: '/' },
+  { label: 'Resolvemos', to: '/resolvemos' },
+  { label: 'Resultados', to: '/resultados' },
+  { label: 'Equipo', to: '/equipo' },
+]
+
+// Vuelve al tope al cambiar de ruta.
+function ScrollToTop() {
+  const { pathname } = useLocation()
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [pathname])
+  return null
+}
+
+/* ------------------------------------------------------------------ */
 /*  Data                                                               */
 /* ------------------------------------------------------------------ */
 const trajectory = [
@@ -123,11 +148,24 @@ const trajectory = [
   { icon: Icon.Activity, color: 'gold', text: 'Producción a escala de millones' },
 ]
 
-const problems = [
-  'Tu operación creció y ahora cuesta más de lo que debería.',
-  'Tu competencia ya automatiza y produce más con menos.',
-  'Todo vive en Excel, WhatsApp y en la cabeza de tu gente.',
-  'Sabes que la IA puede ayudarte, pero no por dónde empezar.',
+// Contraste "Hoy → Con Brío": mismo negocio, operando distinto.
+const transformation = [
+  {
+    today: 'Cada nuevo cliente suma costos y dolores de cabeza.',
+    after: 'Creces sin que los costos crezcan al mismo ritmo.',
+  },
+  {
+    today: 'Datos regados entre Excel, WhatsApp y la memoria de tu gente.',
+    after: 'Una sola fuente de verdad, ordenada y consultable.',
+  },
+  {
+    today: 'Tareas repetitivas que se comen horas cada semana.',
+    after: 'Lo repetitivo, automatizado: tu gente en lo que importa.',
+  },
+  {
+    today: 'Sabes que la IA sirve, pero no por dónde arrancar.',
+    after: 'Una hoja de ruta clara, implementada paso a paso.',
+  },
 ]
 
 const stats = [
@@ -137,7 +175,13 @@ const stats = [
   { value: '2–4', label: 'semanas para desplegar, no 4–8 meses', color: 'text-brio-terra-light' },
 ]
 
-const clients = ['Rentify', 'IncaRail', 'Pacific Control', 'Fidegarante', 'ThrowinSalt']
+const clients = [
+  { name: 'Rentify', logo: '/clients/rentify.png' },
+  { name: 'IncaRail', logo: '/clients/incarail.png' },
+  { name: 'Pacific Control', logo: '/clients/pacific-control.png' },
+  { name: 'Fidegarante', logo: '/clients/fidegarante.png' },
+  { name: 'ThrowinSalt', logo: '/clients/throwin-salt.png' },
+]
 
 const services = [
   {
@@ -168,16 +212,20 @@ const services = [
 
 const founders = [
   {
+    photo: '/team/founder-1.png',
     initials: 'BO',
     name: 'Bruno Oyague',
     role: 'CEO',
+    area: 'Negocio',
     bio: 'Estrategia de negocio y producto. +1K empresas asesoradas en operación y crecimiento.',
     ring: 'ring-brio-terra/30 bg-brio-terra',
   },
   {
+    photo: '/team/founder-2.jpg',
     initials: 'LT',
     name: 'Leonardo Torres',
     role: 'CTO',
+    area: 'Tecnología',
     bio: 'AI Lead en Silicon Valley. Sistemas en producción a escala de millones de usuarios.',
     ring: 'ring-brio-jade/30 bg-brio-jade',
   },
@@ -217,29 +265,32 @@ function Pill({ children }: { children: ReactNode }) {
 /* ------------------------------------------------------------------ */
 function Header() {
   const [open, setOpen] = useState(false)
-  const links = [
-    ['Inicio', '#inicio'],
-    ['Resolvemos', '#que-hacemos'],
-    ['Resultados', '#resultados'],
-    ['Equipo', '#equipo'],
-  ]
   return (
     <header className="fixed top-0 inset-x-0 z-50 py-4">
       <div className="container-x flex items-center justify-between">
-        <a href="#inicio" className="flex items-center gap-2">
+        <Link to="/" className="flex items-center gap-2">
           <span className="flex h-9 w-9 items-center justify-center rounded-[11px] bg-brio-ink text-brio-bone shadow-hard">
             <Icon.Sparkles className="h-4 w-4 text-brio-gold" />
           </span>
           <span className="text-xl font-extrabold tracking-tight text-brio-ink">
             {BRAND.name}
           </span>
-        </a>
+        </Link>
 
         <nav className="hidden md:flex items-center gap-8">
-          {links.map(([label, href]) => (
-            <a key={href} href={href} className="text-sm font-medium tracking-wide text-brio-ink/75 transition-colors hover:text-brio-terra">
+          {NAV.map(({ label, to }) => (
+            <NavLink
+              key={to}
+              to={to}
+              end={to === '/'}
+              className={({ isActive }) =>
+                `text-sm font-medium tracking-wide transition-colors ${
+                  isActive ? 'text-brio-terra' : 'text-brio-ink/75 hover:text-brio-terra'
+                }`
+              }
+            >
               {label}
-            </a>
+            </NavLink>
           ))}
         </nav>
 
@@ -264,10 +315,20 @@ function Header() {
       {open && (
         <div className="md:hidden container-x mt-3">
           <div className="rounded-2xl border border-brio-border bg-brio-paper p-4 shadow-hard-lg">
-            {links.map(([label, href]) => (
-              <a key={href} href={href} onClick={() => setOpen(false)} className="block rounded-xl px-3 py-2.5 text-sm font-medium text-brio-ink/80 hover:bg-brio-muted">
+            {NAV.map(({ label, to }) => (
+              <NavLink
+                key={to}
+                to={to}
+                end={to === '/'}
+                onClick={() => setOpen(false)}
+                className={({ isActive }) =>
+                  `block rounded-xl px-3 py-2.5 text-sm font-medium hover:bg-brio-muted ${
+                    isActive ? 'text-brio-terra' : 'text-brio-ink/80'
+                  }`
+                }
+              >
                 {label}
-              </a>
+              </NavLink>
             ))}
             <a href="#contacto" onClick={() => setOpen(false)} className="mt-2 block rounded-[13px] bg-brio-terra px-5 py-3 text-center text-sm font-bold text-white shadow-hard">
               Hablemos
@@ -361,21 +422,62 @@ function Problem() {
     <section className="section-padding relative overflow-hidden bg-brio-paper">
       <div aria-hidden className="pointer-events-none absolute inset-0 texture-dots" />
       <div className="container-x relative z-10">
-        <div className="max-w-3xl reveal">
+        <div className="mb-12 max-w-2xl reveal">
           <h2 className="font-bold leading-[1.1] text-brio-ink" style={{ fontSize: 'clamp(1.75rem, 5vw, 3rem)' }}>
-            <span className="block">Todos hablan de IA</span>
-            <span className="block text-brio-slate">Nadie te dice cómo usarla</span>
+            El mismo negocio,<br />
+            <span className="text-brio-slate">operando distinto</span>
           </h2>
+          <p className="mt-5 text-base text-brio-slate md:text-lg">
+            No cambiamos lo que vendes. Cambiamos cómo lo haces — para que crezcas
+            sin que los costos te ahoguen.
+          </p>
           <span className="mt-6 block h-1.5 w-16 rounded-full bg-gradient-to-r from-brio-terra to-brio-gold" />
         </div>
-        <ul className="mt-12 grid max-w-4xl gap-4 sm:grid-cols-2">
-          {problems.map((p, i) => (
-            <li key={i} className="reveal flex items-start gap-4 rounded-2xl border border-brio-border bg-brio-paper px-5 py-4 text-base leading-snug text-brio-ink/90 shadow-hard-sm md:text-lg" style={{ transitionDelay: `${i * 90}ms` }}>
-              <span className="mt-1.5 h-2.5 w-2.5 flex-shrink-0 rounded-full bg-brio-terra ring-4 ring-brio-terra/15" />
-              <span>{p}</span>
-            </li>
-          ))}
-        </ul>
+
+        <div className="relative grid gap-5 lg:grid-cols-2">
+          {/* Columna HOY */}
+          <div className="reveal rounded-[22px] border border-brio-border bg-brio-paper p-6 shadow-hard-sm sm:p-8">
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-brio-ink/[0.04] px-3 py-1">
+              <span className="h-2 w-2 rounded-full bg-brio-slate/50" />
+              <span className="text-xs font-bold uppercase tracking-[0.14em] text-brio-slate">Hoy</span>
+            </div>
+            <ul className="space-y-4">
+              {transformation.map((t, i) => (
+                <li key={i} className="flex items-start gap-3 text-sm leading-snug text-brio-slate md:text-base">
+                  <span className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-brio-slate/10 text-brio-slate">
+                    <Icon.Close className="h-3 w-3" />
+                  </span>
+                  <span>{t.today}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Flecha al centro (solo desktop) */}
+          <div aria-hidden className="group absolute left-1/2 top-1/2 z-10 hidden -translate-x-1/2 -translate-y-1/2 cursor-pointer lg:flex">
+            <span className="flex h-11 w-11 items-center justify-center rounded-full border border-brio-border bg-brio-paper text-brio-terra shadow-hard transition-all duration-300 group-hover:scale-110 group-hover:border-brio-terra group-hover:bg-brio-terra group-hover:text-white">
+              <Icon.ArrowRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-0.5" />
+            </span>
+          </div>
+
+          {/* Columna CON BRÍO */}
+          <div className="reveal rounded-[22px] border border-brio-jade/30 bg-brio-ink p-6 shadow-hard-lg sm:p-8" style={{ transitionDelay: '120ms' }}>
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-brio-jade/15 px-3 py-1">
+              <span className="h-2 w-2 rounded-full bg-brio-jade animate-pulse" />
+              <span className="text-xs font-bold uppercase tracking-[0.14em] text-brio-jade-light">Con {BRAND.name}</span>
+            </div>
+            <ul className="space-y-4">
+              {transformation.map((t, i) => (
+                <li key={i} className="flex items-start gap-3 text-sm leading-snug text-white/85 md:text-base">
+                  <span className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-brio-jade/20 text-brio-jade-light">
+                    <Icon.Check className="h-3 w-3" />
+                  </span>
+                  <span>{t.after}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
       </div>
     </section>
   )
@@ -419,10 +521,14 @@ function Clients() {
         </div>
         <div className="grid grid-cols-2 gap-px overflow-hidden rounded-[20px] border border-brio-border bg-brio-border lg:grid-cols-5">
           {clients.map((c) => (
-            <div key={c} className="flex aspect-[4/3] items-center justify-center bg-brio-paper">
-              <span className="font-display text-lg font-extrabold tracking-tight text-brio-ink/40 transition-colors duration-300 hover:text-brio-ink/70 md:text-xl">
-                {c}
-              </span>
+            <div key={c.name} className="group flex aspect-[4/3] items-center justify-center bg-brio-paper p-6">
+              <img
+                src={c.logo}
+                alt={c.name}
+                loading="lazy"
+                decoding="async"
+                className="h-12 w-auto max-w-[75%] object-contain opacity-70 grayscale transition-all duration-300 group-hover:opacity-100 group-hover:grayscale-0 md:h-16"
+              />
             </div>
           ))}
         </div>
@@ -462,6 +568,28 @@ function Services() {
   )
 }
 
+function FounderAvatar({ photo, initials, ring }: { photo: string; initials: string; ring: string }) {
+  const [failed, setFailed] = useState(false)
+  const base =
+    'h-28 w-28 flex-shrink-0 rounded-full object-cover ring-4 ring-offset-4 ring-offset-brio-bone'
+  if (failed) {
+    return (
+      <span className={`flex items-center justify-center text-2xl font-extrabold text-white ${base} ${ring}`}>
+        {initials}
+      </span>
+    )
+  }
+  return (
+    <img
+      src={photo}
+      alt=""
+      loading="lazy"
+      onError={() => setFailed(true)}
+      className={`${base} ${ring}`}
+    />
+  )
+}
+
 function Team() {
   return (
     <section id="equipo" className="section-padding bg-brio-paper scroll-mt-20">
@@ -476,20 +604,20 @@ function Team() {
         </div>
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
           {founders.map((f, i) => (
-            <div key={f.name} className="reveal flex flex-col rounded-[20px] border border-brio-border bg-brio-bone p-8 shadow-hard-sm" style={{ transitionDelay: `${i * 100}ms` }}>
-              <div className="mb-5 flex items-center gap-4">
-                <span className={`flex h-16 w-16 items-center justify-center rounded-2xl text-xl font-extrabold text-white ring-4 ${f.ring}`}>
-                  {f.initials}
-                </span>
-                <div>
-                  <h3 className="text-xl font-bold text-brio-ink">{f.name}</h3>
-                  <p className="font-mono text-xs font-medium uppercase tracking-[0.14em] text-brio-terra">{f.role}</p>
-                </div>
-                <a href="#" aria-label={`LinkedIn de ${f.name}`} className="ml-auto text-brio-slate/60 transition-colors hover:text-brio-terra">
-                  <Icon.Linkedin className="h-5 w-5" />
-                </a>
-              </div>
-              <p className="text-sm leading-relaxed text-brio-slate">{f.bio}</p>
+            <div key={f.name} className="reveal flex flex-col items-center rounded-[20px] border border-brio-border bg-brio-bone p-8 text-center shadow-hard-sm" style={{ transitionDelay: `${i * 100}ms` }}>
+              <FounderAvatar photo={f.photo} initials={f.initials} ring={f.ring} />
+              <h3 className="mt-6 text-xl font-bold text-brio-ink">{f.name}</h3>
+              <p className="mt-1 font-mono text-xs font-medium uppercase tracking-[0.14em] text-brio-terra">
+                {f.role} · {f.area}
+              </p>
+              <p className="mt-4 max-w-xs text-sm leading-relaxed text-brio-slate">{f.bio}</p>
+              <a
+                href="#"
+                aria-label={`LinkedIn de ${f.name}`}
+                className="mt-5 inline-flex h-9 w-9 items-center justify-center rounded-full border border-brio-border text-brio-slate/60 transition-colors hover:border-brio-terra hover:text-brio-terra"
+              >
+                <Icon.Linkedin className="h-4 w-4" />
+              </a>
             </div>
           ))}
         </div>
@@ -507,14 +635,26 @@ function Faq() {
             Preguntas honestas, respuestas honestas
           </h2>
         </div>
-        <div className="grid max-w-5xl gap-4 md:grid-cols-2">
+        <div className="grid max-w-5xl gap-3 md:grid-cols-2 md:items-start">
           {faqs.map((f, i) => (
-            <div key={i} className="reveal rounded-2xl border border-brio-border bg-brio-paper p-6 shadow-hard-sm" style={{ transitionDelay: `${i * 70}ms` }}>
-              <h3 className="mb-2 flex items-start gap-2 font-bold text-brio-ink">
+            <div
+              key={i}
+              className="reveal group cursor-pointer overflow-hidden rounded-2xl border border-brio-border bg-brio-paper shadow-hard-sm transition-colors duration-300 hover:border-brio-terra/60"
+              style={{ transitionDelay: `${i * 70}ms` }}
+            >
+              <div className="flex items-center gap-3 px-5 py-4">
                 <span aria-hidden className="font-mono text-brio-terra">{'>_'}</span>
-                {f.q}
-              </h3>
-              <p className="text-sm leading-relaxed text-brio-slate">{f.a}</p>
+                <h3 className="flex-1 font-bold text-brio-ink">{f.q}</h3>
+                <Icon.ChevronDown className="h-5 w-5 flex-shrink-0 text-brio-slate/50 transition-transform duration-300 group-hover:rotate-180 group-hover:text-brio-terra" />
+              </div>
+              {/* grid-rows 0fr → 1fr anima la altura suavemente al hacer hover */}
+              <div className="grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-out group-hover:grid-rows-[1fr]">
+                <div className="overflow-hidden">
+                  <p className="px-5 pb-5 pl-[2.6rem] text-sm leading-relaxed text-brio-slate">
+                    {f.a}
+                  </p>
+                </div>
+              </div>
             </div>
           ))}
         </div>
@@ -553,20 +693,20 @@ function Contact() {
           </div>
 
           <form className="reveal rounded-[24px] border border-white/10 bg-white/[0.04] p-6 backdrop-blur-sm sm:p-8" onSubmit={(e) => e.preventDefault()}>
-            <div className="space-y-4">
+            <div className="space-y-6">
               <div>
-                <label className="mb-1.5 block text-xs font-medium uppercase tracking-wide text-white/50">Nombre</label>
-                <input type="text" className="w-full rounded-xl border border-white/10 bg-brio-ink-dark/60 px-4 py-3 text-sm text-white placeholder-white/30 outline-none transition-colors focus:border-brio-terra" placeholder="Tu nombre" />
+                <label className="mb-2 block text-xs font-medium uppercase tracking-wide text-white/50">Nombre</label>
+                <input type="text" className="w-full rounded-xl border border-white/10 bg-brio-ink-dark/60 px-4 py-3.5 text-sm text-white placeholder-white/30 outline-none transition-colors focus:border-brio-terra" placeholder="Tu nombre" />
               </div>
               <div>
-                <label className="mb-1.5 block text-xs font-medium uppercase tracking-wide text-white/50">Correo</label>
-                <input type="email" className="w-full rounded-xl border border-white/10 bg-brio-ink-dark/60 px-4 py-3 text-sm text-white placeholder-white/30 outline-none transition-colors focus:border-brio-terra" placeholder="tucorreo@empresa.com" />
+                <label className="mb-2 block text-xs font-medium uppercase tracking-wide text-white/50">Correo</label>
+                <input type="email" className="w-full rounded-xl border border-white/10 bg-brio-ink-dark/60 px-4 py-3.5 text-sm text-white placeholder-white/30 outline-none transition-colors focus:border-brio-terra" placeholder="tucorreo@empresa.com" />
               </div>
               <div>
-                <label className="mb-1.5 block text-xs font-medium uppercase tracking-wide text-white/50">¿Qué quieres resolver?</label>
-                <textarea rows={3} className="w-full resize-none rounded-xl border border-white/10 bg-brio-ink-dark/60 px-4 py-3 text-sm text-white placeholder-white/30 outline-none transition-colors focus:border-brio-terra" placeholder="Cuéntanos en una línea..." />
+                <label className="mb-2 block text-xs font-medium uppercase tracking-wide text-white/50">¿Qué quieres resolver?</label>
+                <textarea rows={3} className="w-full resize-none rounded-xl border border-white/10 bg-brio-ink-dark/60 px-4 py-3.5 text-sm text-white placeholder-white/30 outline-none transition-colors focus:border-brio-terra" placeholder="Cuéntanos en una línea..." />
               </div>
-              <button type="submit" className="inline-flex w-full items-center justify-center gap-2 rounded-[13px] bg-brio-terra px-6 py-4 text-sm font-bold text-white shadow-hard transition-all duration-300 hover:-translate-y-0.5 hover:bg-brio-terra-dark">
+              <button type="submit" className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-[13px] bg-brio-terra px-6 py-4 text-sm font-bold text-white shadow-hard transition-all duration-300 hover:-translate-y-0.5 hover:bg-brio-terra-dark">
                 Enviar
                 <Icon.ArrowRight className="h-4 w-4" />
               </button>
@@ -605,24 +745,73 @@ function Footer() {
 }
 
 /* ------------------------------------------------------------------ */
-/*  App                                                                */
+/*  Pages                                                              */
 /* ------------------------------------------------------------------ */
-export default function App() {
+// Inicio — TODO el contenido de ahora vive aquí (ruta por defecto "/")
+function Home() {
   useScrollReveal()
   return (
-    <div className="min-h-screen w-full">
-      <Header />
-      <main>
-        <Hero />
-        <Problem />
-        <Results />
-        <Clients />
-        <Services />
-        <Team />
-        <Faq />
-        <Contact />
-      </main>
-      <Footer />
-    </div>
+    <main>
+      <Hero />
+      <Problem />
+      <Results />
+      <Clients />
+      <Services />
+      <Team />
+      <Faq />
+      <Contact />
+    </main>
+  )
+}
+
+// Página placeholder para las rutas que todavía no construimos.
+function ComingSoon({ title }: { title: string }) {
+  return (
+    <main className="section-padding bg-brio-bone">
+      <div className="container-x flex min-h-[70vh] flex-col items-center justify-center pt-20 text-center">
+        <span className="mb-5 inline-flex items-center gap-2 rounded-full bg-brio-terra/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.14em] text-brio-terra">
+          <span className="h-1.5 w-1.5 rounded-full bg-brio-terra animate-pulse" />
+          Próximamente
+        </span>
+        <h1 className="font-display text-3xl font-extrabold text-brio-ink md:text-5xl">{title}</h1>
+        <p className="mt-4 max-w-md text-brio-slate">
+          Esta página aún no existe. Por ahora todo el contenido vive en Inicio;
+          pronto le damos el suyo.
+        </p>
+        <Link
+          to="/"
+          className="mt-8 inline-flex items-center gap-2 rounded-[13px] bg-brio-ink px-6 py-3 text-sm font-bold text-white shadow-hard transition-transform duration-300 hover:-translate-y-0.5"
+        >
+          Volver a Inicio
+          <Icon.ArrowRight className="h-4 w-4" />
+        </Link>
+      </div>
+    </main>
+  )
+}
+
+/* ------------------------------------------------------------------ */
+/*  App — router. Header y Footer son layout compartido por toda ruta. */
+/* ------------------------------------------------------------------ */
+export default function App() {
+  return (
+    <BrowserRouter>
+      <ScrollToTop />
+      <div className="min-h-screen w-full">
+        <Header />
+        <Routes>
+          {/* Inicio — la única página real por ahora */}
+          <Route path="/" element={<Home />} />
+
+          {/* Rutas aún sin construir. Reemplaza <ComingSoon> por su
+              componente real cuando creemos cada página. */}
+          <Route path="/resolvemos" element={<ComingSoon title="Resolvemos" />} />
+          <Route path="/resultados" element={<ComingSoon title="Resultados" />} />
+          <Route path="/equipo" element={<ComingSoon title="Equipo" />} />
+          <Route path="*" element={<ComingSoon title="Página no encontrada" />} />
+        </Routes>
+        <Footer />
+      </div>
+    </BrowserRouter>
   )
 }
