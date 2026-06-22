@@ -351,9 +351,9 @@ function Header() {
         </nav>
 
         <div className="hidden md:flex items-center gap-3">
-          <a href={BRAND.whatsapp} target="_blank" rel="noopener noreferrer" className={btnGreen('px-5 py-2')}>
-            <Icon.Whatsapp className="h-4 w-4" />
-            Quiero revisar mi negocio
+          <a href={BRAND.whatsapp} target="_blank" rel="noopener noreferrer" className={btnGreen('px-4 py-2 text-xs')}>
+            <Icon.Whatsapp className="h-3.5 w-3.5" />
+            Hablemos
           </a>
         </div>
 
@@ -418,7 +418,7 @@ function Hero() {
       <div className="container-x relative z-10 flex flex-col items-center">
         <span className="reveal is-visible mb-7 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-4 py-1.5 text-xs font-semibold text-white/80 backdrop-blur-sm">
           <span className="h-1.5 w-1.5 rounded-full bg-brio-terra animate-pulse" />
-          IA simple para negocios de verdad
+          Sin tecnicismos, sin complicarte
         </span>
 
         <h1
