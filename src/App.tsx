@@ -169,12 +169,26 @@ const process = [
 ]
 
 const sectors = [
-  { icon: Icon.Store, title: 'Bodegas y markets', quote: 'Que no se te acabe lo que más vendes.' },
-  { icon: Icon.Shirt, title: 'Tiendas de ropa', quote: 'Responde más rápido y no pierdas ventas.' },
-  { icon: Icon.Utensils, title: 'Restaurantes', quote: 'Menos desorden en hora punta.' },
-  { icon: Icon.Wrench, title: 'Ferreterías', quote: 'Cotiza en minutos, no en media hora.' },
-  { icon: Icon.Stethoscope, title: 'Consultorios y servicios', quote: 'Menos ausencias y menos mensajes manuales.' },
-  { icon: Icon.Cap, title: 'Academias y talleres', quote: 'Alumnos, pagos y consultas en un solo flujo.' },
+  { icon: Icon.Store,       title: 'Bodegas y markets',        quote: 'IA que predice qué vas a necesitar antes de que se acabe.' },
+  { icon: Icon.Shirt,       title: 'Tiendas de ropa',          quote: 'Automatiza respuestas de tallas, precios y disponibilidad.' },
+  { icon: Icon.Utensils,    title: 'Restaurantes',             quote: 'Digitaliza tu carta y recibe pedidos sin llamadas ni papel.' },
+  { icon: Icon.Wrench,      title: 'Ferreterías',              quote: 'Cotizaciones automáticas listas en segundos, sin calculadora.' },
+  { icon: Icon.Stethoscope, title: 'Consultorios',             quote: 'IA que agenda citas, manda recordatorios y filtra urgencias.' },
+  { icon: Icon.Cap,         title: 'Academias y talleres',     quote: 'Automatiza matrículas, pagos y comunicación con alumnos.' },
+  { icon: Icon.Chat,        title: 'Atención al cliente',      quote: 'Un agente de IA que responde el 80% de consultas sin humano.' },
+  { icon: Icon.Chart,       title: 'Análisis de ventas',       quote: 'Transforma tu Excel en un dashboard que se actualiza solo.' },
+  { icon: Icon.Cash,        title: 'Gestión de cobranza',      quote: 'Recordatorios de pago automáticos por WhatsApp o correo.' },
+  { icon: Icon.Folder,      title: 'Gestión documental',       quote: 'IA que clasifica, resume y encuentra cualquier archivo al instante.' },
+  { icon: Icon.Whatsapp,    title: 'Ventas por WhatsApp',      quote: 'Automatiza tu proceso de venta sin salir de WhatsApp.' },
+  { icon: Icon.Instagram,   title: 'Redes sociales',           quote: 'IA que genera contenido adaptado a tu negocio y calendario.' },
+  { icon: Icon.Store,       title: 'Farmacias',                quote: 'Control de stock automatizado y alertas de reposición.' },
+  { icon: Icon.Wrench,      title: 'Talleres mecánicos',       quote: 'Digitaliza órdenes de trabajo y automatiza el seguimiento.' },
+  { icon: Icon.Stethoscope, title: 'Clínicas veterinarias',    quote: 'Historial de pacientes digital y recordatorios automáticos.' },
+  { icon: Icon.Utensils,    title: 'Panaderías y pastelerías', quote: 'Planifica tu producción según pedidos anticipados del día.' },
+  { icon: Icon.Cap,         title: 'Inmobiliarias',            quote: 'IA que califica leads y agenda visitas sin intervención manual.' },
+  { icon: Icon.Chart,       title: 'Contadores y estudios',    quote: 'Automatiza reportes y deja que la IA detecte las anomalías.' },
+  { icon: Icon.Folder,      title: 'Estudios jurídicos',       quote: 'IA que revisa contratos y genera borradores en minutos.' },
+  { icon: Icon.Cash,        title: 'Gimnasios y centros fit',  quote: 'Transforma tu gestión: pagos, asistencia y seguimiento digital.' },
 ]
 
 const transformation = [
@@ -198,8 +212,8 @@ const testimonials = [
 ]
 
 const founders = [
-  { photo: '/team/founder-1.png', initials: 'BO', name: 'Bruno Oyague', role: 'Negocio', bio: 'Entra a tu operación y la ordena contigo. Años ayudando a negocios a vender mejor sin complicarse.', ring: 'ring-brio-terra/30 bg-brio-terra' },
-  { photo: '/team/founder-2.jpg', initials: 'LT', name: 'Leonardo Torres', role: 'Tecnología', bio: 'Hace que la tecnología sea simple. Herramientas que tu equipo sí usa, sin tecnicismos.', ring: 'ring-brio-plum/30 bg-brio-plum' },
+  { photo: '/team/founder-1.png', initials: 'YR', name: 'Yumi Reyes', role: 'Negocio', bio: 'Entra a tu operación y la ordena contigo. Años ayudando a negocios a vender mejor sin complicarse.', ring: 'ring-brio-terra/30 bg-brio-terra' },
+  { photo: '/team/founder-2.jpg', initials: 'MF', name: 'Miguel Fernández', role: 'Tecnología', bio: 'Hace que la tecnología sea simple. Herramientas que tu equipo sí usa, sin tecnicismos.', ring: 'ring-brio-plum/30 bg-brio-plum' },
 ]
 
 const faqs = [
@@ -703,10 +717,10 @@ function Sectors() {
         </Reveal>
       </div>
       <div className="relative z-10 space-y-4" style={{ maskImage: 'linear-gradient(to right, transparent, #000 6%, #000 94%, transparent)', WebkitMaskImage: 'linear-gradient(to right, transparent, #000 6%, #000 94%, transparent)' }}>
-        <Marquee speed={40}>
+        <Marquee speed={160}>
           {sectors.map((c) => <SectorChip key={c.title} {...c} />)}
         </Marquee>
-        <Marquee speed={46} reverse>
+        <Marquee speed={190} reverse>
           {sectors.slice().reverse().map((c) => <SectorChip key={c.title} {...c} />)}
         </Marquee>
       </div>
@@ -1078,7 +1092,6 @@ function Team() {
                     <p className="relative mt-2 font-mono text-xs font-bold uppercase tracking-[0.18em] text-brio-plum">{f.role}</p>
                     <p className="relative mt-5 flex-1 text-sm leading-relaxed text-brio-slate">{f.bio}</p>
                     <div className="relative mt-6 flex items-center justify-center gap-3 border-t border-brio-border pt-5">
-                      <span className="rounded-full bg-brio-muted px-3 py-1.5 text-[11px] font-bold text-brio-ink">hands-on</span>
                       <a href="#" aria-label={`LinkedIn de ${f.name}`} className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-brio-border text-brio-slate/60 transition-all duration-300 hover:border-brio-plum hover:text-brio-plum hover:-translate-y-0.5"><Icon.Linkedin className="h-4 w-4" /></a>
                     </div>
                   </div>
@@ -1098,8 +1111,12 @@ function Team() {
 function FaqItem({ q, a }: { q: string; a: string }) {
   const [open, setOpen] = useState(false)
   return (
-    <div className="overflow-hidden rounded-2xl border border-brio-border bg-white shadow-hard-sm">
-      <button onClick={() => setOpen((v) => !v)} className="flex w-full items-center gap-3 px-5 py-4 text-left">
+    <div
+      className="overflow-hidden rounded-2xl border border-brio-border bg-white shadow-hard-sm"
+      onMouseEnter={() => setOpen(true)}
+      onMouseLeave={() => setOpen(false)}
+    >
+      <button className="flex w-full items-center gap-3 px-5 py-4 text-left" tabIndex={0} onClick={() => setOpen((v) => !v)}>
         <h3 className="flex-1 font-bold text-brio-ink">{q}</h3>
         <motion.span animate={{ rotate: open ? 180 : 0 }} transition={{ duration: 0.3 }} className={open ? 'text-brio-plum' : 'text-brio-slate/50'}><Icon.ChevronDown className="h-5 w-5" /></motion.span>
       </button>
