@@ -160,12 +160,10 @@ const solutions = [
 ]
 
 const process = [
-  { n: '1', title: 'Miramos tu negocio por dentro', body: 'Vemos cómo vendes, cobras, anotas, atiendes y compras. Sin juzgar.' },
-  { n: '2', title: 'Encontramos dónde se va el tiempo', body: 'Priorizamos tareas repetitivas, errores y oportunidades rápidas.' },
-  { n: '3', title: 'Probamos una solución pequeña', body: 'Te mostramos una mejora simple antes de implementarla completa.' },
-  { n: '4', title: 'La dejamos funcionando', body: 'Implementación liviana, conectada a tu operación real de cada día.' },
-  { n: '5', title: 'Enseñamos a tu equipo', body: 'Aprenden con sus propios pedidos, clientes, ventas y stock.' },
-  { n: '6', title: 'Te acompañamos', body: 'Seguimos ajustando y mejorando cuando tu negocio cambia.' },
+  { n: '1', title: 'Diagnóstico',       body: 'Vemos cómo vendes, cobras, atiendes y anotas. Encontramos dónde se va el tiempo.' },
+  { n: '2', title: 'Prototipo rápido',  body: 'Te mostramos una mejora concreta antes de implementarla. Sin compromisos.' },
+  { n: '3', title: 'Implementación',    body: 'Dejamos la solución funcionando, conectada a tu operación real del día a día.' },
+  { n: '4', title: 'Acompañamiento',    body: 'Capacitamos a tu equipo y seguimos ajustando cuando tu negocio cambia.' },
 ]
 
 const sectors = [
@@ -658,12 +656,52 @@ function Solutions() {
 function StepMock({ n }: { n: number }) {
   // pequeña UI decorativa distinta por paso
   const common = 'mt-5 rounded-xl border border-brio-border bg-brio-muted p-3'
-  if (n === 0) return <div className={common}><div className="flex gap-1.5">{['Cercano', 'Vendedor', 'Formal'].map((t, i) => <span key={t} className={`rounded-full px-2 py-0.5 text-[9px] font-bold ${i === 0 ? 'bg-brio-plum text-white' : 'bg-white text-brio-slate'}`}>{t}</span>)}</div><div className="mt-2 space-y-1.5">{[0, 1].map((i) => <div key={i} className="h-2 rounded bg-brio-border" style={{ width: `${80 - i * 25}%` }} />)}</div></div>
-  if (n === 1) return <div className={common}><div className="grid grid-cols-5 gap-1">{Array.from({ length: 15 }).map((_, i) => <span key={i} className={`h-2.5 rounded-sm ${i === 9 ? 'bg-brio-terra' : 'bg-brio-border'}`} />)}</div></div>
-  if (n === 2) return <div className={common}><div className="space-y-1.5"><div className="h-2 w-2/3 rounded bg-brio-border" /><div className="h-2 w-full rounded bg-brio-terra/60" /></div><span className="mt-2 inline-block rounded-md bg-brio-terra px-2 py-0.5 text-[9px] font-bold text-brio-ink">✓ Venta cerrada</span></div>
-  if (n === 3) return <div className={common}><div className="flex items-end gap-1">{[40, 55, 45, 70, 60, 90].map((h, i) => <span key={i} className={`w-full rounded-t ${i === 5 ? 'bg-brio-terra' : 'bg-brio-plum/40'}`} style={{ height: `${h * 0.4}px` }} />)}</div></div>
-  if (n === 4) return <div className={common}><div className="space-y-1.5">{[0, 1, 2].map((i) => <div key={i} className="flex items-center gap-2"><span className="h-4 w-4 rounded-full bg-brio-plum/15" /><div className="h-2 flex-1 rounded bg-brio-border" /><Icon.Check className="h-3 w-3 text-brio-terra" /></div>)}</div></div>
-  return <div className={common}><div className="flex items-center gap-2"><span className="flex h-6 w-6 items-center justify-center rounded-full bg-brio-terra/20 text-brio-terra"><Icon.Chat className="h-3.5 w-3.5" /></span><div className="h-2 flex-1 rounded bg-brio-border" /></div></div>
+  // Paso 1 — Diagnóstico: checklist de áreas revisadas
+  if (n === 0) return (
+    <div className={common}>
+      {[['Ventas', true], ['Cobranza', true], ['Atención', false], ['Stock', false]].map(([label, done]) => (
+        <div key={label as string} className="flex items-center gap-2 py-1">
+          <span className={`flex h-4 w-4 flex-shrink-0 items-center justify-center rounded ${done ? 'bg-brio-plum text-white' : 'border border-brio-border bg-white'}`}>
+            {done && <Icon.Check className="h-2.5 w-2.5" />}
+          </span>
+          <div className={`h-1.5 flex-1 rounded ${done ? 'bg-brio-plum/40' : 'bg-brio-border'}`} />
+          <span className="text-[9px] font-bold text-brio-slate">{label as string}</span>
+        </div>
+      ))}
+    </div>
+  )
+  // Paso 2 — Prototipo: chat WhatsApp antes/después
+  if (n === 1) return (
+    <div className={common + ' space-y-1.5'}>
+      <div className="max-w-[80%] rounded-lg rounded-tl-sm bg-white px-2 py-1.5 text-[9px] leading-tight text-brio-slate shadow-hard-sm">¿Tienes talla M en negro?</div>
+      <div className="ml-auto max-w-[85%] rounded-lg rounded-tr-sm bg-brio-terra px-2 py-1.5 text-[9px] font-bold leading-tight text-brio-ink">Sí, S/.89. ¿Te lo aparto? 👇</div>
+      <span className="inline-block rounded-md bg-brio-plum/10 px-1.5 py-0.5 text-[8px] font-bold text-brio-plum">Vista previa del prototipo</span>
+    </div>
+  )
+  // Paso 3 — Implementación: flujo de nodos conectados
+  if (n === 2) return (
+    <div className={common + ' flex items-center justify-between gap-1'}>
+      {[['WA', 'bg-[#25D366] text-white'], ['IA', 'bg-brio-plum text-white'], ['Hoja', 'bg-brio-terra text-brio-ink']].map(([label, cls], i, arr) => (
+        <div key={label as string} className="flex items-center gap-1">
+          <div className={`flex h-8 w-8 items-center justify-center rounded-lg text-[9px] font-black ${cls}`}>{label as string}</div>
+          {i < arr.length - 1 && <div className="h-px w-3 border-t-2 border-dashed border-brio-border" />}
+        </div>
+      ))}
+      <span className="ml-1 text-[9px] font-bold text-brio-terra">✓ listo</span>
+    </div>
+  )
+  // Paso 4 — Acompañamiento: métricas de mejora
+  if (n === 3) return (
+    <div className={common}>
+      <div className="flex items-end gap-1">
+        {[30, 42, 38, 55, 61, 80].map((h, i) => (
+          <span key={i} className={`w-full rounded-t transition-all ${i === 5 ? 'bg-brio-terra' : 'bg-brio-plum/30'}`} style={{ height: `${h * 0.38}px` }} />
+        ))}
+      </div>
+      <div className="mt-2 text-[9px] font-bold text-brio-plum">↑ mejora continua</div>
+    </div>
+  )
+  return null
 }
 
 function Process() {
@@ -674,7 +712,7 @@ function Process() {
           <Pill>Cómo trabajamos</Pill>
           <h2 className="mt-4 text-fluid-section font-bold leading-tight text-brio-ink">Miramos tu negocio por dentro antes de tocar tecnología</h2>
         </Reveal>
-        <Stagger className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:grid lg:grid-cols-3 lg:overflow-visible">
+        <Stagger className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:grid lg:grid-cols-4 lg:overflow-visible">
           {process.map((p, i) => (
             <StaggerItem key={p.n} className="w-[78%] flex-shrink-0 snap-start sm:w-[44%] lg:w-auto">
               <div className="flex h-full flex-col rounded-[20px] border border-brio-border bg-white p-6 shadow-hard-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-hard-lg">
