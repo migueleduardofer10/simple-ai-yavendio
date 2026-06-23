@@ -1,6 +1,17 @@
 import { useEffect, useState } from 'react'
 import type { ReactNode } from 'react'
 import { BrowserRouter, Routes, Route, NavLink, Link, useLocation } from 'react-router-dom'
+import {
+  Reveal,
+  Stagger,
+  StaggerItem,
+  Counter,
+  Marquee,
+  Parallax,
+  Tilt,
+  motion,
+  AnimatePresence,
+} from './motion'
 
 /* ------------------------------------------------------------------ */
 /*  Marca — cambia el nombre / contacto en UN solo lugar               */
@@ -28,115 +39,72 @@ const stroke = {
 
 const Icon = {
   Menu: ({ className }: IconProps) => (
-    <svg viewBox="0 0 24 24" className={className} {...stroke}>
-      <path d="M4 5h16M4 12h16M4 19h16" />
-    </svg>
+    <svg viewBox="0 0 24 24" className={className} {...stroke}><path d="M4 5h16M4 12h16M4 19h16" /></svg>
   ),
   Close: ({ className }: IconProps) => (
-    <svg viewBox="0 0 24 24" className={className} {...stroke}>
-      <path d="M18 6 6 18M6 6l12 12" />
-    </svg>
+    <svg viewBox="0 0 24 24" className={className} {...stroke}><path d="M18 6 6 18M6 6l12 12" /></svg>
   ),
   ArrowRight: ({ className }: IconProps) => (
-    <svg viewBox="0 0 24 24" className={className} {...stroke}>
-      <path d="M5 12h14M12 5l7 7-7 7" />
-    </svg>
+    <svg viewBox="0 0 24 24" className={className} {...stroke}><path d="M5 12h14M12 5l7 7-7 7" /></svg>
   ),
   Check: ({ className }: IconProps) => (
-    <svg viewBox="0 0 24 24" className={className} {...stroke}>
-      <path d="M20 6 9 17l-5-5" />
-    </svg>
+    <svg viewBox="0 0 24 24" className={className} {...stroke}><path d="M20 6 9 17l-5-5" /></svg>
   ),
   ChevronDown: ({ className }: IconProps) => (
-    <svg viewBox="0 0 24 24" className={className} {...stroke}>
-      <path d="m6 9 6 6 6-6" />
-    </svg>
+    <svg viewBox="0 0 24 24" className={className} {...stroke}><path d="m6 9 6 6 6-6" /></svg>
   ),
   Sparkles: ({ className }: IconProps) => (
     <svg viewBox="0 0 24 24" className={className} {...stroke}>
       <path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z" />
-      <path d="M20 2v4M22 4h-4" />
-      <circle cx="4" cy="20" r="2" />
+      <path d="M20 2v4M22 4h-4" /><circle cx="4" cy="20" r="2" />
     </svg>
   ),
   Mail: ({ className }: IconProps) => (
-    <svg viewBox="0 0 24 24" className={className} {...stroke}>
-      <rect x="2" y="4" width="20" height="16" rx="2" />
-      <path d="m22 7-10 6L2 7" />
-    </svg>
+    <svg viewBox="0 0 24 24" className={className} {...stroke}><rect x="2" y="4" width="20" height="16" rx="2" /><path d="m22 7-10 6L2 7" /></svg>
   ),
   Whatsapp: ({ className }: IconProps) => (
-    <svg viewBox="0 0 24 24" className={className} fill="currentColor">
-      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z" />
-    </svg>
+    <svg viewBox="0 0 24 24" className={className} fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z" /></svg>
+  ),
+  Instagram: ({ className }: IconProps) => (
+    <svg viewBox="0 0 24 24" className={className} {...stroke}><rect x="2" y="2" width="20" height="20" rx="5" /><circle cx="12" cy="12" r="4" /><path d="M17.5 6.5h.01" /></svg>
   ),
   Linkedin: ({ className }: IconProps) => (
-    <svg viewBox="0 0 24 24" className={className} fill="currentColor">
-      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z" />
-    </svg>
+    <svg viewBox="0 0 24 24" className={className} fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z" /></svg>
   ),
-  // Íconos de rubro
   Store: ({ className }: IconProps) => (
-    <svg viewBox="0 0 24 24" className={className} {...stroke}>
-      <path d="M3 9h18l-1.5-5.5A1 1 0 0 0 18.54 3H5.46a1 1 0 0 0-.96.5L3 9Z" />
-      <path d="M4 9v10a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V9" />
-      <path d="M9 20v-5h6v5" />
-    </svg>
+    <svg viewBox="0 0 24 24" className={className} {...stroke}><path d="M3 9h18l-1.5-5.5A1 1 0 0 0 18.54 3H5.46a1 1 0 0 0-.96.5L3 9Z" /><path d="M4 9v10a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V9" /><path d="M9 20v-5h6v5" /></svg>
   ),
   Shirt: ({ className }: IconProps) => (
-    <svg viewBox="0 0 24 24" className={className} {...stroke}>
-      <path d="M8 3 4 6l2 3 2-1v10h8V8l2 1 2-3-4-3-2 2H10L8 3Z" />
-    </svg>
+    <svg viewBox="0 0 24 24" className={className} {...stroke}><path d="M8 3 4 6l2 3 2-1v10h8V8l2 1 2-3-4-3-2 2H10L8 3Z" /></svg>
   ),
   Utensils: ({ className }: IconProps) => (
-    <svg viewBox="0 0 24 24" className={className} {...stroke}>
-      <path d="M4 3v6a2 2 0 0 0 2 2v10M9 3v8M6.5 3v5M18 3c-1.5 0-3 1.5-3 5 0 2.5 1 3.5 2 4v9" />
-    </svg>
+    <svg viewBox="0 0 24 24" className={className} {...stroke}><path d="M4 3v6a2 2 0 0 0 2 2v10M9 3v8M6.5 3v5M18 3c-1.5 0-3 1.5-3 5 0 2.5 1 3.5 2 4v9" /></svg>
   ),
   Wrench: ({ className }: IconProps) => (
-    <svg viewBox="0 0 24 24" className={className} {...stroke}>
-      <path d="M14.7 6.3a4 4 0 0 0 5 5l-9 9a2.83 2.83 0 0 1-4-4l9-9a4 4 0 0 0-1-1Z" />
-    </svg>
+    <svg viewBox="0 0 24 24" className={className} {...stroke}><path d="M14.7 6.3a4 4 0 0 0 5 5l-9 9a2.83 2.83 0 0 1-4-4l9-9a4 4 0 0 0-1-1Z" /></svg>
   ),
   Stethoscope: ({ className }: IconProps) => (
-    <svg viewBox="0 0 24 24" className={className} {...stroke}>
-      <path d="M5 3v6a4 4 0 0 0 8 0V3" />
-      <path d="M9 17a5 5 0 0 0 10 0v-2" />
-      <circle cx="20" cy="11" r="2" />
-    </svg>
+    <svg viewBox="0 0 24 24" className={className} {...stroke}><path d="M5 3v6a4 4 0 0 0 8 0V3" /><path d="M9 17a5 5 0 0 0 10 0v-2" /><circle cx="20" cy="11" r="2" /></svg>
   ),
   Cap: ({ className }: IconProps) => (
-    <svg viewBox="0 0 24 24" className={className} {...stroke}>
-      <path d="M22 9 12 5 2 9l10 4 10-4Z" />
-      <path d="M6 11v5c0 1 2.5 3 6 3s6-2 6-3v-5" />
-    </svg>
+    <svg viewBox="0 0 24 24" className={className} {...stroke}><path d="M22 9 12 5 2 9l10 4 10-4Z" /><path d="M6 11v5c0 1 2.5 3 6 3s6-2 6-3v-5" /></svg>
+  ),
+  Chart: ({ className }: IconProps) => (
+    <svg viewBox="0 0 24 24" className={className} {...stroke}><path d="M3 3v18h18" /><path d="M7 16v-4M12 16V8M17 16v-6" /></svg>
+  ),
+  Chat: ({ className }: IconProps) => (
+    <svg viewBox="0 0 24 24" className={className} {...stroke}><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5Z" /></svg>
+  ),
+  Cash: ({ className }: IconProps) => (
+    <svg viewBox="0 0 24 24" className={className} {...stroke}><rect x="2" y="6" width="20" height="12" rx="2" /><circle cx="12" cy="12" r="2" /><path d="M6 12h.01M18 12h.01" /></svg>
+  ),
+  Folder: ({ className }: IconProps) => (
+    <svg viewBox="0 0 24 24" className={className} {...stroke}><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z" /></svg>
   ),
 }
 
 /* ------------------------------------------------------------------ */
-/*  Scroll reveal — agrega .is-visible a cada .reveal en pantalla      */
-/* ------------------------------------------------------------------ */
-function useScrollReveal() {
-  useEffect(() => {
-    const els = document.querySelectorAll('.reveal')
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) {
-            e.target.classList.add('is-visible')
-            io.unobserve(e.target)
-          }
-        })
-      },
-      { threshold: 0.12 },
-    )
-    els.forEach((el) => io.observe(el))
-    return () => io.disconnect()
-  }, [])
-}
-
-/* ------------------------------------------------------------------ */
-/*  Navegación — cada item es una RUTA (no una sección de Inicio)       */
+/*  Navegación — cada item es una RUTA                                  */
 /* ------------------------------------------------------------------ */
 const NAV = [
   { label: 'Inicio', to: '/' },
@@ -145,7 +113,6 @@ const NAV = [
   { label: 'Casos', to: '/casos' },
 ]
 
-// Vuelve al tope al cambiar de ruta.
 function ScrollToTop() {
   const { pathname } = useLocation()
   useEffect(() => {
@@ -155,54 +122,39 @@ function ScrollToTop() {
 }
 
 /* ------------------------------------------------------------------ */
-/*  Data                                                               */
+/*  Data (copy intacto)                                                */
 /* ------------------------------------------------------------------ */
-// Conversaciones para el mockup del hero (bandeja tipo WhatsApp).
 const inbox = [
   { initials: 'MT', name: 'María Torres', msg: '¡Mi pago fue exitoso! 🎉', time: '12:45', unread: false },
   { initials: 'CR', name: 'Camila Ríos', msg: '¿Tienen la talla M?', time: '13:30', unread: true },
   { initials: 'JL', name: 'José Luna', msg: 'Quiero 2 docenas', time: '14:15', unread: true },
 ]
 
-// Dolores cotidianos ("Te entendemos").
+const channels = [
+  { icon: Icon.Whatsapp, label: 'WhatsApp' },
+  { icon: Icon.Instagram, label: 'Instagram' },
+  { icon: Icon.Chart, label: 'Excel' },
+  { icon: Icon.Folder, label: 'Google Sheets' },
+]
+
 const pains = [
-  'Pedidos por WhatsApp que se pierden entre tantos chats.',
-  'Stock que se acaba sin aviso y te enteras tarde.',
-  'Reportes que nadie tiene tiempo de hacer.',
-  'Clientes que preguntan lo mismo todos los días.',
-  'Caja que recién revisas a mano al cierre.',
-  'Info regada en cuadernos, Excel, notas y chats.',
+  { icon: Icon.Whatsapp, text: 'Pedidos por WhatsApp que se pierden entre tantos chats.' },
+  { icon: Icon.Store, text: 'Stock que se acaba sin aviso y te enteras tarde.' },
+  { icon: Icon.Chart, text: 'Reportes que nadie tiene tiempo de hacer.' },
+  { icon: Icon.Chat, text: 'Clientes que preguntan lo mismo todos los días.' },
+  { icon: Icon.Cash, text: 'Caja que recién revisas a mano al cierre.' },
+  { icon: Icon.Folder, text: 'Info regada en cuadernos, Excel, notas y chats.' },
 ]
 
-// Qué resolvemos: problema del dueño → solución simple.
 const solutions = [
-  {
-    quote: 'Me preguntan todo el día precio, talla, stock o disponibilidad.',
-    solution: 'Respuestas asistidas y un catálogo simple conectado a WhatsApp.',
-  },
-  {
-    quote: 'Me doy cuenta que falta mercadería cuando el cliente ya la pidió.',
-    solution: 'Alertas de reposición y reporte de tus productos más vendidos.',
-  },
-  {
-    quote: 'Cierro el día y recién trato de entender cuánto vendí.',
-    solution: 'Resumen diario automático de ventas, pagos, pedidos y pendientes.',
-  },
-  {
-    quote: 'Me escriben, preguntan y después se pierden.',
-    solution: 'Recordatorios para volver a contactar a clientes interesados.',
-  },
-  {
-    quote: 'Compro por intuición y a veces sobra o falta.',
-    solution: 'Lista de compras sugerida según ventas, temporada y rotación.',
-  },
-  {
-    quote: 'A mi equipo le cuesta usar herramientas nuevas.',
-    solution: 'Capacitación con casos reales y herramientas simples, no sistemas.',
-  },
+  { tab: 'Atención', quote: 'Me preguntan todo el día precio, talla, stock o disponibilidad.', solution: 'Respuestas asistidas y un catálogo simple conectado a WhatsApp.' },
+  { tab: 'Stock', quote: 'Me doy cuenta que falta mercadería cuando el cliente ya la pidió.', solution: 'Alertas de reposición y reporte de tus productos más vendidos.' },
+  { tab: 'Caja', quote: 'Cierro el día y recién trato de entender cuánto vendí.', solution: 'Resumen diario automático de ventas, pagos, pedidos y pendientes.' },
+  { tab: 'Clientes', quote: 'Me escriben, preguntan y después se pierden.', solution: 'Recordatorios para volver a contactar a clientes interesados.' },
+  { tab: 'Compras', quote: 'Compro por intuición y a veces sobra o falta.', solution: 'Lista de compras sugerida según ventas, temporada y rotación.' },
+  { tab: 'Equipo', quote: 'A mi equipo le cuesta usar herramientas nuevas.', solution: 'Capacitación con casos reales y herramientas simples, no sistemas.' },
 ]
 
-// Cómo trabajamos (proceso de 6 pasos, lenguaje cotidiano).
 const process = [
   { n: '1', title: 'Miramos tu negocio por dentro', body: 'Vemos cómo vendes, cobras, anotas, atiendes y compras. Sin juzgar.' },
   { n: '2', title: 'Encontramos dónde se va el tiempo', body: 'Priorizamos tareas repetitivas, errores y oportunidades rápidas.' },
@@ -212,7 +164,6 @@ const process = [
   { n: '6', title: 'Te acompañamos', body: 'Seguimos ajustando y mejorando cuando tu negocio cambia.' },
 ]
 
-// Casos por rubro.
 const sectors = [
   { icon: Icon.Store, title: 'Bodegas y markets', quote: 'Que no se te acabe lo que más vendes.' },
   { icon: Icon.Shirt, title: 'Tiendas de ropa', quote: 'Responde más rápido y no pierdas ventas.' },
@@ -222,7 +173,6 @@ const sectors = [
   { icon: Icon.Cap, title: 'Academias y talleres', quote: 'Alumnos, pagos y consultas en un solo flujo.' },
 ]
 
-// Antes / después (mismo negocio, operando distinto).
 const transformation = [
   { today: 'Pedidos perdidos entre mil chats de WhatsApp.', after: 'Pedidos ordenados, con estado y seguimiento.' },
   { today: 'Stock que revisas a ojo o cuando ya es tarde.', after: 'Alertas cuando un producto está por acabarse.' },
@@ -230,7 +180,6 @@ const transformation = [
   { today: 'Respondes lo mismo una y otra vez.', after: 'Respuestas listas para tus preguntas frecuentes.' },
 ]
 
-// Módulos de capacitación.
 const training = [
   { title: 'IA para atención al cliente', result: 'Plantillas de respuestas para WhatsApp e Instagram.' },
   { title: 'IA para ventas', result: 'Promociones, seguimiento y un calendario simple de campañas.' },
@@ -238,23 +187,15 @@ const training = [
   { title: 'IA para inventario y compras', result: 'Productos por reponer y lista de compras sugerida.' },
 ]
 
+const testimonials = [
+  { initials: 'RQ', name: 'Rosa Quispe', business: 'Bodega · Minimarket', quote: 'Antes los pedidos de WhatsApp se me perdían. Ahora llegan ordenados y con seguimiento. Dejé de perder ventas.' },
+  { initials: 'CM', name: 'Carlos Medina', business: 'Tienda de ropa', quote: 'La IA responde tallas, precios y stock al toque. Yo solo entro a cerrar la venta.' },
+  { initials: 'LF', name: 'Lucía Fernández', business: 'Restaurante', quote: 'Cierro caja en minutos y sé qué se vendió sin sacar la calculadora. Mucho menos estrés en hora punta.' },
+]
+
 const founders = [
-  {
-    photo: '/team/founder-1.png',
-    initials: 'BO',
-    name: 'Bruno Oyague',
-    role: 'Negocio',
-    bio: 'Entra a tu operación y la ordena contigo. Años ayudando a negocios a vender mejor sin complicarse.',
-    ring: 'ring-brio-terra/30 bg-brio-terra',
-  },
-  {
-    photo: '/team/founder-2.jpg',
-    initials: 'LT',
-    name: 'Leonardo Torres',
-    role: 'Tecnología',
-    bio: 'Hace que la tecnología sea simple. Herramientas que tu equipo sí usa, sin tecnicismos.',
-    ring: 'ring-brio-jade/30 bg-brio-jade',
-  },
+  { photo: '/team/founder-1.png', initials: 'BO', name: 'Bruno Oyague', role: 'Negocio', bio: 'Entra a tu operación y la ordena contigo. Años ayudando a negocios a vender mejor sin complicarse.', ring: 'ring-brio-terra/30 bg-brio-terra' },
+  { photo: '/team/founder-2.jpg', initials: 'LT', name: 'Leonardo Torres', role: 'Tecnología', bio: 'Hace que la tecnología sea simple. Herramientas que tu equipo sí usa, sin tecnicismos.', ring: 'ring-brio-plum/30 bg-brio-plum' },
 ]
 
 const faqs = [
@@ -271,24 +212,28 @@ const faqs = [
 /* ------------------------------------------------------------------ */
 function Pill({ children, dark = false }: { children: ReactNode; dark?: boolean }) {
   return (
-    <span
-      className={`inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.14em] ${
-        dark ? 'text-white/60' : 'text-brio-slate/70'
-      }`}
-    >
+    <span className={`inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.16em] ${dark ? 'text-white/55' : 'text-brio-plum'}`}>
       {children}
     </span>
   )
 }
 
-// Botón verde Platzi (texto oscuro sobre verde, como Platzi).
-function btnGreen(extra = '') {
-  return `inline-flex items-center justify-center gap-2 rounded-xl bg-brio-terra px-6 py-3.5 text-sm font-bold text-brio-ink shadow-hard transition-all duration-300 hover:-translate-y-0.5 hover:bg-brio-terra-dark ${extra}`
+function btnPrimary(extra = '') {
+  return `inline-flex items-center justify-center gap-2 rounded-xl bg-brio-terra px-6 py-3.5 text-sm font-bold text-brio-ink shadow-hard transition-all duration-300 hover:-translate-y-0.5 hover:bg-brio-terra-dark active:translate-y-0 active:scale-[0.97] ${extra}`
 }
 
-/* ------------------------------------------------------------------ */
-/*  Secciones                                                          */
-/* ------------------------------------------------------------------ */
+function SectionCta({ text }: { text: string }) {
+  return (
+    <Reveal className="mt-12 flex justify-center">
+      <a href={BRAND.whatsapp} target="_blank" rel="noopener noreferrer" className={btnPrimary('px-7 py-4')}>
+        <Icon.Whatsapp className="h-5 w-5" />
+        {text}
+        <Icon.ArrowRight className="h-4 w-4" />
+      </a>
+    </Reveal>
+  )
+}
+
 function Logo({ dark = false }: { dark?: boolean }) {
   return (
     <Link to="/" className="flex items-center gap-2">
@@ -303,6 +248,9 @@ function Logo({ dark = false }: { dark?: boolean }) {
   )
 }
 
+/* ------------------------------------------------------------------ */
+/*  Header — barra consciente del scroll                               */
+/* ------------------------------------------------------------------ */
 function Header() {
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
@@ -313,568 +261,534 @@ function Header() {
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
-  // Sobre el hero oscuro (tope del Inicio) la barra es transparente con texto claro.
   const overHero = pathname === '/' && !scrolled
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:pt-4">
-      <div
-        className={`container-x flex items-center justify-between rounded-full border px-4 py-2.5 transition-colors duration-300 sm:px-5 ${
-          overHero
-            ? 'border-white/10 bg-white/[0.05] backdrop-blur-md'
-            : 'border-brio-border bg-white/80 shadow-hard backdrop-blur-md'
-        }`}
-      >
+    <header className={`fixed top-0 inset-x-0 z-50 py-3.5 transition-colors duration-300 ${overHero ? 'bg-transparent' : 'border-b border-brio-border/70 bg-white/85 backdrop-blur-md'}`}>
+      <div className="container-x flex items-center justify-between">
         <Logo dark={overHero} />
-
         <nav className="hidden md:flex items-center gap-8">
           {NAV.map(({ label, to }) => (
-            <NavLink
-              key={to}
-              to={to}
-              end={to === '/'}
-              className={({ isActive }) =>
-                `text-sm font-medium tracking-wide transition-colors ${
-                  isActive
-                    ? overHero
-                      ? 'text-brio-terra'
-                      : 'text-brio-plum'
-                    : overHero
-                      ? 'text-white/80 hover:text-brio-terra'
-                      : 'text-brio-ink/75 hover:text-brio-plum'
-                }`
-              }
-            >
+            <NavLink key={to} to={to} end={to === '/'} className={({ isActive }) =>
+              `text-sm font-medium tracking-wide transition-colors ${isActive ? (overHero ? 'text-brio-terra' : 'text-brio-plum') : overHero ? 'text-white/80 hover:text-brio-terra' : 'text-brio-ink/75 hover:text-brio-plum'}`}>
               {label}
             </NavLink>
           ))}
         </nav>
-
         <div className="hidden md:flex items-center gap-3">
-          <a href={BRAND.whatsapp} target="_blank" rel="noopener noreferrer" className={btnGreen('px-4 py-2 text-xs')}>
+          <a href={BRAND.whatsapp} target="_blank" rel="noopener noreferrer" className={btnPrimary('px-4 py-2 text-xs')}>
             <Icon.Whatsapp className="h-3.5 w-3.5" />
             Hablemos
           </a>
         </div>
-
-        <button
-          aria-label="Abrir menú"
-          className={`md:hidden -m-2.5 p-2.5 ${overHero ? 'text-white' : 'text-brio-ink'}`}
-          onClick={() => setOpen((v) => !v)}
-        >
+        <button aria-label="Abrir menú" className={`md:hidden -m-2.5 p-2.5 ${overHero ? 'text-white' : 'text-brio-ink'}`} onClick={() => setOpen((v) => !v)}>
           {open ? <Icon.Close className="h-6 w-6" /> : <Icon.Menu className="h-6 w-6" />}
         </button>
       </div>
-
-      {open && (
-        <div className="md:hidden container-x mt-3">
-          <div className="rounded-2xl border border-brio-border bg-white p-4 shadow-hard-lg">
-            {NAV.map(({ label, to }) => (
-              <NavLink
-                key={to}
-                to={to}
-                end={to === '/'}
-                onClick={() => setOpen(false)}
-                className={({ isActive }) =>
-                  `block rounded-xl px-3 py-2.5 text-sm font-medium hover:bg-brio-muted ${
-                    isActive ? 'text-brio-plum' : 'text-brio-ink/80'
-                  }`
-                }
-              >
-                {label}
-              </NavLink>
-            ))}
-            <a href={BRAND.whatsapp} target="_blank" rel="noopener noreferrer" onClick={() => setOpen(false)} className={btnGreen('mt-2 w-full')}>
-              <Icon.Whatsapp className="h-4 w-4" />
-              Quiero revisar mi negocio
-            </a>
-          </div>
-        </div>
-      )}
+      <AnimatePresence>
+        {open && (
+          <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} className="md:hidden container-x mt-3">
+            <div className="rounded-2xl border border-brio-border bg-white p-4 shadow-hard-lg">
+              {NAV.map(({ label, to }) => (
+                <NavLink key={to} to={to} end={to === '/'} onClick={() => setOpen(false)} className={({ isActive }) =>
+                  `block rounded-xl px-3 py-2.5 text-sm font-medium hover:bg-brio-muted ${isActive ? 'text-brio-plum' : 'text-brio-ink/80'}`}>
+                  {label}
+                </NavLink>
+              ))}
+              <a href={BRAND.whatsapp} target="_blank" rel="noopener noreferrer" onClick={() => setOpen(false)} className={btnPrimary('mt-2 w-full')}>
+                <Icon.Whatsapp className="h-4 w-4" />
+                Quiero revisar mi negocio
+              </a>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   )
 }
 
+/* ------------------------------------------------------------------ */
+/*  Mockup de bandeja (reutilizable: hero)                             */
+/* ------------------------------------------------------------------ */
+function InboxMockup() {
+  return (
+    <div className="overflow-hidden rounded-2xl border border-white/10 bg-white text-left shadow-hard-lg">
+      <div className="flex items-center gap-1.5 border-b border-brio-border bg-brio-muted px-4 py-3">
+        <span className="h-2.5 w-2.5 rounded-full bg-brio-border" />
+        <span className="h-2.5 w-2.5 rounded-full bg-brio-border" />
+        <span className="h-2.5 w-2.5 rounded-full bg-brio-border" />
+        <span className="mx-auto rounded-md bg-white px-3 py-0.5 text-[11px] font-medium text-brio-slate">app.simple.ai</span>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-[1fr_1.3fr]">
+        <div className="hidden border-r border-brio-border p-3 sm:block">
+          <div className="mb-3 flex items-center justify-between px-1">
+            <span className="text-sm font-bold text-brio-ink">Mensajes</span>
+            <span className="rounded-full bg-brio-terra/20 px-2 py-0.5 text-[10px] font-bold text-brio-gold-dark">2 nuevos</span>
+          </div>
+          <div className="space-y-1">
+            {inbox.map((c) => (
+              <div key={c.initials} className="flex items-center gap-3 rounded-xl px-2 py-2 hover:bg-brio-muted">
+                <span className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-brio-plum/10 text-[11px] font-bold text-brio-plum">{c.initials}</span>
+                <span className="min-w-0 flex-1">
+                  <span className="flex items-center justify-between">
+                    <span className="truncate text-xs font-bold text-brio-ink">{c.name}</span>
+                    <span className="ml-2 text-[10px] text-brio-slate/60">{c.time}</span>
+                  </span>
+                  <span className="truncate block text-[11px] text-brio-slate">{c.msg}</span>
+                </span>
+                {c.unread && <span className="h-2 w-2 flex-shrink-0 rounded-full bg-brio-terra" />}
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="flex flex-col gap-3 bg-brio-muted/50 p-4 sm:p-5">
+          <div className="flex items-center gap-2">
+            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-brio-plum/10 text-[11px] font-bold text-brio-plum">CR</span>
+            <span>
+              <span className="block text-xs font-bold text-brio-ink">Camila Ríos</span>
+              <span className="flex items-center gap-1 text-[10px] text-brio-slate"><span className="h-1.5 w-1.5 rounded-full bg-brio-terra" /> En línea</span>
+            </span>
+          </div>
+          <div className="mt-1 max-w-[80%] self-start rounded-2xl rounded-tl-sm bg-white px-3.5 py-2.5 text-xs text-brio-ink shadow-hard-sm">Hola, ¿tienen ese polo que vi en Instagram? 👀</div>
+          <div className="max-w-[85%] self-end rounded-2xl rounded-tr-sm bg-brio-terra px-3.5 py-2.5 text-xs font-medium text-brio-ink shadow-hard-sm">¡Hola Camila! 🙌 Sí, lo tengo en talla M y S. Te lo aparto y te paso el link de pago.</div>
+          <span className="self-end text-[10px] font-semibold text-brio-gold-dark">⚡ Respondido por IA en 4s</span>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/* ------------------------------------------------------------------ */
+/*  1 — HERO (2 columnas, mockup gigante)                              */
+/* ------------------------------------------------------------------ */
 function Hero() {
   return (
-    <section
-      id="inicio"
-      className="relative flex min-h-[100dvh] flex-col items-center justify-center overflow-hidden bg-brio-ink-dark pb-12 pt-28 text-center"
-    >
-      {/* Fondo: degradado + glows + textura */}
+    <section id="inicio" className="relative overflow-hidden bg-brio-ink-dark pt-28 md:pt-32">
       <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              'radial-gradient(120% 90% at 50% -10%, rgba(138,46,146,0.45), transparent 60%), radial-gradient(80% 60% at 85% 15%, rgba(245,225,78,0.10), transparent 55%), radial-gradient(70% 60% at 10% 90%, rgba(176,60,160,0.28), transparent 60%)',
-          }}
-        />
+        <div className="absolute inset-0" style={{ background: 'radial-gradient(120% 90% at 75% -10%, rgba(138,46,146,0.42), transparent 60%), radial-gradient(70% 60% at 0% 100%, rgba(176,60,160,0.22), transparent 60%)' }} />
         <div className="absolute inset-0 texture-dots-dark opacity-50" />
-        <div className="absolute -top-40 left-1/2 h-[44rem] w-[44rem] -translate-x-1/2 glow-radial-terra animate-float-slow" />
-        <div className="absolute bottom-0 -right-24 h-[28rem] w-[28rem] glow-radial-jade animate-float" />
       </div>
 
-      <div className="container-x relative z-10 flex flex-col items-center">
-        <span className="reveal is-visible mb-7 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-4 py-1.5 text-xs font-semibold text-white/80 backdrop-blur-sm">
-          <span className="h-1.5 w-1.5 rounded-full bg-brio-terra animate-pulse" />
-          Sin tecnicismos, sin complicarte
-        </span>
+      <div className="container-x relative z-10">
+        <div className="grid items-center gap-12 pb-16 lg:grid-cols-[0.95fr_1.05fr] lg:gap-10 lg:pb-24">
+          {/* Texto */}
+          <div>
+            <motion.span initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }} className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-4 py-1.5 text-xs font-semibold text-white/80 backdrop-blur-sm">
+              <span className="h-1.5 w-1.5 rounded-full bg-brio-terra" /> IA simple para negocios de verdad
+            </motion.span>
+            <motion.h1 initial={{ opacity: 0, y: 22 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.08 }} className="font-display font-extrabold leading-[1.03] tracking-[-0.035em] text-white" style={{ fontSize: 'clamp(2.4rem, 5.4vw, 4.4rem)' }}>
+              Llevamos los negocios a la <span className="text-gradient">era de la IA</span>
+            </motion.h1>
+            <motion.p initial={{ opacity: 0, y: 22 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.16 }} className="mt-6 max-w-lg text-base leading-relaxed text-white/65 md:text-lg">
+              Entramos a tu operación y usamos IA, automatización o herramientas simples para que vendas más, pierdas menos tiempo y trabajes con menos desorden.
+            </motion.p>
+            <motion.div initial={{ opacity: 0, y: 22 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.24 }} className="mt-9 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center">
+              <a href={BRAND.whatsapp} target="_blank" rel="noopener noreferrer" className={btnPrimary('px-7 py-4 text-base')}>
+                <Icon.Whatsapp className="h-5 w-5" /> Quiero revisar mi negocio
+              </a>
+              <a href="#casos" className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/[0.06] px-6 py-4 text-sm font-bold text-white backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/10 md:text-base">
+                Ver ejemplos por rubro <Icon.ArrowRight className="h-4 w-4" />
+              </a>
+            </motion.div>
+          </div>
 
-        <h1
-          className="reveal is-visible mx-auto max-w-4xl font-display font-extrabold leading-[1.02] tracking-[-0.035em] text-white"
-          style={{ fontSize: 'clamp(2.5rem, 7vw, 5rem)' }}
-        >
-          Llevamos los negocios
-          <br />a la{' '}
-          <span className="text-gradient">era de la IA</span>
-        </h1>
-
-        <p className="reveal is-visible mx-auto mt-7 max-w-xl text-base leading-relaxed text-white/65 md:text-lg">
-          Entramos a tu operación y usamos IA, automatización o herramientas simples
-          para que vendas más, pierdas menos tiempo y trabajes con menos desorden.
-        </p>
-
-        <div className="reveal is-visible mt-9 flex w-full flex-col items-stretch gap-3 sm:w-auto sm:flex-row sm:items-center">
-          <a href={BRAND.whatsapp} target="_blank" rel="noopener noreferrer" className={btnGreen('px-7 py-4 text-base')}>
-            <Icon.Whatsapp className="h-5 w-5" />
-            Quiero revisar mi negocio
-          </a>
-          <a href="#casos" className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/[0.06] px-6 py-4 text-sm font-bold text-white backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/10 md:text-base">
-            Ver ejemplos por rubro
-            <Icon.ArrowRight className="h-4 w-4" />
-          </a>
-        </div>
-
-        {/* Mockup: bandeja tipo WhatsApp atendida por IA */}
-        <div className="reveal is-visible relative mt-14 w-full max-w-5xl">
-          <div className="overflow-hidden rounded-2xl border border-white/10 bg-white text-left shadow-hard-lg">
-            {/* barra superior */}
-            <div className="flex items-center gap-1.5 border-b border-brio-border bg-brio-muted px-4 py-3">
-              <span className="h-2.5 w-2.5 rounded-full bg-brio-border" />
-              <span className="h-2.5 w-2.5 rounded-full bg-brio-border" />
-              <span className="h-2.5 w-2.5 rounded-full bg-brio-border" />
-              <span className="mx-auto rounded-md bg-white px-3 py-0.5 text-[11px] font-medium text-brio-slate">
-                app.simple.ai
+          {/* Mockup gigante */}
+          <motion.div initial={{ opacity: 0, y: 40, scale: 0.96 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.3 }} className="relative">
+            <Tilt className="relative">
+              <InboxMockup />
+            </Tilt>
+            {/* Badges flotantes con contador */}
+            <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.7, duration: 0.6 }} className="absolute -right-3 top-16 hidden items-center gap-2 rounded-xl border border-white/10 bg-brio-ink px-3.5 py-2.5 shadow-hard-lg sm:flex">
+              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-brio-terra/20 text-brio-terra"><Icon.Cash className="h-4 w-4" /></span>
+              <span className="leading-tight">
+                <Counter to={55826} prefix="S/ " className="block text-sm font-extrabold text-white" />
+                <span className="block text-[10px] text-white/50">vendido hoy</span>
               </span>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-[1fr_1.3fr]">
-              {/* bandeja */}
-              <div className="hidden border-r border-brio-border p-3 sm:block">
-                <div className="mb-3 flex items-center justify-between px-1">
-                  <span className="text-sm font-bold text-brio-ink">Mensajes</span>
-                  <span className="rounded-full bg-brio-terra/15 px-2 py-0.5 text-[10px] font-bold text-brio-gold-dark">2 nuevos</span>
-                </div>
-                <div className="space-y-1">
-                  {inbox.map((c) => (
-                    <div key={c.initials} className="flex items-center gap-3 rounded-xl px-2 py-2 hover:bg-brio-muted">
-                      <span className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-brio-terra/15 text-[11px] font-bold text-brio-gold-dark">
-                        {c.initials}
-                      </span>
-                      <span className="min-w-0 flex-1">
-                        <span className="flex items-center justify-between">
-                          <span className="truncate text-xs font-bold text-brio-ink">{c.name}</span>
-                          <span className="ml-2 text-[10px] text-brio-slate/60">{c.time}</span>
-                        </span>
-                        <span className="truncate block text-[11px] text-brio-slate">{c.msg}</span>
-                      </span>
-                      {c.unread && <span className="h-2 w-2 flex-shrink-0 rounded-full bg-brio-terra" />}
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* chat */}
-              <div className="flex flex-col gap-3 bg-brio-muted/50 p-4 sm:p-5">
-                <div className="flex items-center gap-2">
-                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-brio-terra/15 text-[11px] font-bold text-brio-gold-dark">CR</span>
-                  <span>
-                    <span className="block text-xs font-bold text-brio-ink">Camila Ríos</span>
-                    <span className="flex items-center gap-1 text-[10px] text-brio-slate">
-                      <span className="h-1.5 w-1.5 rounded-full bg-brio-terra" /> En línea
-                    </span>
-                  </span>
-                </div>
-
-                <div className="mt-1 max-w-[80%] self-start rounded-2xl rounded-tl-sm bg-white px-3.5 py-2.5 text-xs text-brio-ink shadow-hard-sm">
-                  Hola, ¿tienen ese polo que vi en Instagram? 👀
-                </div>
-                <div className="max-w-[85%] self-end rounded-2xl rounded-tr-sm bg-brio-terra px-3.5 py-2.5 text-xs font-medium text-brio-ink shadow-hard-sm">
-                  ¡Hola Camila! 🙌 Sí, lo tengo en talla M y S. Te lo aparto y te paso el link de pago.
-                </div>
-                <span className="self-end text-[10px] font-semibold text-brio-gold-dark">
-                  ⚡ Respondido por IA en 4s
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* badge flotante de ventas */}
-          <div className="absolute -right-2 top-24 hidden items-center gap-2 rounded-xl border border-white/10 bg-brio-ink px-3.5 py-2.5 shadow-hard-lg sm:flex">
-            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-brio-terra/20 text-brio-terra">
-              <Icon.Whatsapp className="h-4 w-4" />
-            </span>
-            <span className="leading-tight">
-              <span className="block text-sm font-extrabold text-white">S/ 55,826</span>
-              <span className="block text-[10px] text-white/50">vendido hoy</span>
-            </span>
-          </div>
-
-          {/* badge flotante de pedidos */}
-          <div className="absolute -left-3 bottom-10 hidden items-center gap-2 rounded-xl border border-white/10 bg-brio-ink px-3.5 py-2.5 shadow-hard-lg sm:flex">
-            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-brio-terra/20 text-brio-terra">
-              <Icon.Check className="h-4 w-4" />
-            </span>
-            <span className="leading-tight">
-              <span className="block text-sm font-extrabold text-white">+38 pedidos</span>
-              <span className="block text-[10px] text-white/50">atendidos sin que muevas un dedo</span>
-            </span>
-          </div>
-
-          {/* badge flotante de stock */}
-          <div className="absolute -left-3 top-16 hidden items-center gap-2 rounded-xl border border-white/10 bg-brio-ink px-3.5 py-2.5 shadow-hard-lg lg:flex">
-            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-brio-terra/20 text-brio-terra">
-              <Icon.Store className="h-4 w-4" />
-            </span>
-            <span className="leading-tight">
-              <span className="block text-sm font-extrabold text-white">Stock bajo</span>
-              <span className="block text-[10px] text-white/50">quedan 3 · te avisamos a tiempo</span>
-            </span>
-          </div>
-
-          {/* badge flotante de respuesta */}
-          <div className="absolute -right-3 bottom-12 hidden items-center gap-2 rounded-xl border border-white/10 bg-brio-ink px-3.5 py-2.5 shadow-hard-lg lg:flex">
-            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-brio-terra/20 text-brio-terra">
-              <Icon.Sparkles className="h-4 w-4" />
-            </span>
-            <span className="leading-tight">
-              <span className="block text-sm font-extrabold text-white">Responde sola</span>
-              <span className="block text-[10px] text-white/50">en segundos, 24/7</span>
-            </span>
-          </div>
+            </motion.div>
+            <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.85, duration: 0.6 }} className="absolute -left-3 bottom-10 hidden items-center gap-2 rounded-xl border border-white/10 bg-brio-ink px-3.5 py-2.5 shadow-hard-lg sm:flex">
+              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-brio-terra/20 text-brio-terra"><Icon.Check className="h-4 w-4" /></span>
+              <span className="leading-tight">
+                <Counter to={38} prefix="+" suffix=" pedidos" className="block text-sm font-extrabold text-white" />
+                <span className="block text-[10px] text-white/50">atendidos sin que muevas un dedo</span>
+              </span>
+            </motion.div>
+          </motion.div>
         </div>
+      </div>
 
-        {/* Franja de canales — "funciona donde ya vendes" */}
-        <div className="reveal is-visible mt-12 flex flex-col items-center gap-4">
-          <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/35">
-            Funciona donde tu negocio ya vende
-          </span>
-          <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-sm font-bold text-white/55">
-            <span className="flex items-center gap-2">
-              <Icon.Whatsapp className="h-4 w-4 text-brio-terra" /> WhatsApp
+      {/* Marquee de canales */}
+      <div className="relative z-10 border-t border-white/10 py-6">
+        <Marquee speed={26}>
+          {channels.concat(channels, channels).map(({ icon: I, label }, i) => (
+            <span key={i} className="mx-6 inline-flex items-center gap-2 text-sm font-bold text-white/45">
+              <I className="h-4 w-4 text-brio-terra" /> {label}
             </span>
-            <span className="flex items-center gap-2">
-              <span className="h-1.5 w-1.5 rounded-full bg-brio-terra" /> Instagram
-            </span>
-            <span className="flex items-center gap-2">
-              <span className="h-1.5 w-1.5 rounded-full bg-brio-terra" /> Excel
-            </span>
-            <span className="flex items-center gap-2">
-              <span className="h-1.5 w-1.5 rounded-full bg-brio-terra" /> Google Sheets
-            </span>
-          </div>
-        </div>
+          ))}
+        </Marquee>
       </div>
     </section>
   )
 }
 
-// 2 — Dolores cotidianos (CLARO)
+/* ------------------------------------------------------------------ */
+/*  2 — TE ENTENDEMOS (sticky izq + lista notificaciones der)         */
+/* ------------------------------------------------------------------ */
 function Pains() {
   return (
-    <section className="section-padding relative overflow-hidden bg-brio-muted">
+    <section className="section-padding relative overflow-hidden bg-brio-bone">
       <div aria-hidden className="pointer-events-none absolute inset-0 texture-dots" />
-      <div className="container-x relative z-10">
-        <div className="mb-12 max-w-2xl reveal">
-          <Pill>Te entendemos</Pill>
-          <h2 className="mt-4 font-bold leading-[1.1] text-brio-ink" style={{ fontSize: 'clamp(1.75rem, 5vw, 3rem)' }}>
-            Tu negocio no necesita sonar moderno.<br />
-            <span className="text-brio-slate">Necesita funcionar mejor.</span>
-          </h2>
-          <p className="mt-5 text-base text-brio-slate md:text-lg">
-            Si creciste pero todo sigue en WhatsApp, cuadernos y Excel, no estás solo.
-            Ahí es donde entramos.
-          </p>
+      <div className="container-x relative z-10 grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
+        <div className="lg:sticky lg:top-28 lg:self-start">
+          <Reveal>
+            <Pill>Te entendemos</Pill>
+            <h2 className="mt-4 font-bold leading-[1.08] text-brio-ink" style={{ fontSize: 'clamp(1.9rem, 4.4vw, 3.2rem)' }}>
+              Tu negocio no necesita sonar moderno.<br /><span className="text-brio-slate">Necesita funcionar mejor.</span>
+            </h2>
+            <p className="mt-5 max-w-md text-base text-brio-slate md:text-lg">
+              Si creciste pero todo sigue en WhatsApp, cuadernos y Excel, no estás solo. Ahí es donde entramos.
+            </p>
+          </Reveal>
         </div>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {pains.map((p, i) => (
-            <div key={i} className="reveal flex items-start gap-3 rounded-2xl border border-brio-border bg-white p-5 shadow-hard-sm" style={{ transitionDelay: `${i * 60}ms` }}>
-              <span className="mt-0.5 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-brio-slate/10 text-brio-slate">
-                <Icon.Close className="h-3.5 w-3.5" />
-              </span>
-              <span className="text-sm leading-snug text-brio-ink md:text-base">{p}</span>
-            </div>
+        <Stagger className="flex flex-col gap-3">
+          {pains.map(({ icon: I, text }, i) => (
+            <StaggerItem key={i}>
+              <div className="group flex items-center gap-4 rounded-2xl border border-brio-border bg-white p-4 shadow-hard-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-brio-plum/30 hover:shadow-hard-lg sm:p-5">
+                <span className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-brio-plum/10 text-brio-plum transition-colors duration-300 group-hover:bg-brio-terra group-hover:text-brio-ink">
+                  <I className="h-5 w-5" />
+                </span>
+                <span className="text-sm font-medium leading-snug text-brio-ink md:text-base">{text}</span>
+                <span className="ml-auto hidden text-brio-slate/30 transition-colors group-hover:text-brio-plum sm:block"><Icon.ArrowRight className="h-5 w-5" /></span>
+              </div>
+            </StaggerItem>
           ))}
-        </div>
+        </Stagger>
       </div>
     </section>
   )
 }
 
-// 3 — Postura de simplicidad (OSCURO · spotlight)
+/* ------------------------------------------------------------------ */
+/*  3 — LO SIMPLE GANA (manifiesto full-bleed)                         */
+/* ------------------------------------------------------------------ */
 function Simplicity() {
   return (
-    <section className="section-padding relative overflow-hidden bg-brio-ink scroll-mt-20">
+    <section className="relative overflow-hidden bg-brio-ink py-28 md:py-40">
       <div aria-hidden className="pointer-events-none absolute inset-0 texture-dots-dark" />
-      <div aria-hidden className="pointer-events-none absolute -top-20 left-[8%] h-[26rem] w-[26rem] glow-radial-terra animate-float-slow" />
+      <Parallax amount={60} className="pointer-events-none absolute -top-24 left-1/2 h-[34rem] w-[34rem] -translate-x-1/2 glow-radial-terra" />
       <div className="container-x relative z-10">
-        <div className="mx-auto max-w-3xl text-center reveal">
+        <Reveal className="mx-auto max-w-4xl text-center">
           <Pill dark>Lo simple gana</Pill>
-          <h2 className="mt-5 font-display font-extrabold leading-[1.1] text-white" style={{ fontSize: 'clamp(1.875rem, 4.5vw, 3.25rem)' }}>
-            No todo necesita un sistema. A veces solo hay que{' '}
-            <span className="text-gradient">ordenar bien lo que ya usas.</span>
+          <h2 className="mt-6 font-display font-extrabold leading-[1.08] text-white" style={{ fontSize: 'clamp(2rem, 5vw, 3.6rem)' }}>
+            No todo necesita un sistema. A veces solo hay que <span className="text-gradient">ordenar bien lo que ya usas.</span>
           </h2>
-          <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-white/65 md:text-lg">
-            Si una hoja de cálculo resuelve, la mejoramos. Si WhatsApp es tu canal de
-            venta, lo hacemos más inteligente. Si necesitas un sistema, lo construimos.
-            Pero no empezamos por ahí. <span className="text-white/90 font-semibold">Cobramos por resolver, no por complicarte.</span>
+          <p className="mx-auto mt-7 max-w-2xl text-base leading-relaxed text-white/65 md:text-lg">
+            Si una hoja de cálculo resuelve, la mejoramos. Si WhatsApp es tu canal de venta, lo hacemos más inteligente. Si necesitas un sistema, lo construimos. Pero no empezamos por ahí. <span className="font-semibold text-white/90">Cobramos por resolver, no por complicarte.</span>
           </p>
-        </div>
+        </Reveal>
       </div>
     </section>
   )
 }
 
-// 4 — Qué resolvemos (CLARO)
+/* ------------------------------------------------------------------ */
+/*  4 — QUÉ RESOLVEMOS (tabs interactivas con panel vivo)             */
+/* ------------------------------------------------------------------ */
 function Solutions() {
+  const [active, setActive] = useState(0)
+  const s = solutions[active]
   return (
-    <section id="resolvemos" className="section-padding relative overflow-hidden bg-brio-bone scroll-mt-20">
+    <section id="resolvemos" className="section-padding relative overflow-hidden bg-brio-muted scroll-mt-20">
       <div aria-hidden className="pointer-events-none absolute inset-0 texture-dots" />
       <div className="container-x relative z-10">
-        <div className="mb-12 max-w-2xl reveal">
+        <Reveal className="mb-10 max-w-2xl">
           <Pill>Qué resolvemos</Pill>
-          <h2 className="mt-4 text-fluid-section font-bold leading-tight text-brio-ink">
-            Hacemos que lo repetitivo se haga solo o más rápido
-          </h2>
-          <p className="mt-5 text-base text-brio-slate md:text-lg">
-            No cambiamos lo que ya funciona. Quitamos lo que te roba tiempo y plata.
-          </p>
-        </div>
-        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {solutions.map((s, i) => (
-            <div key={i} className="reveal card-hover flex flex-col rounded-[20px] border border-brio-border bg-white p-6 shadow-hard-sm" style={{ transitionDelay: `${i * 70}ms` }}>
-              <p className="mb-5 text-sm italic leading-snug text-brio-slate">“{s.quote}”</p>
-              <div className="mt-auto flex items-start gap-3 border-t border-brio-border pt-4">
-                <span className="mt-0.5 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-brio-terra text-brio-ink">
-                  <Icon.Check className="h-3.5 w-3.5" />
-                </span>
-                <span className="text-sm font-semibold leading-snug text-brio-ink">{s.solution}</span>
-              </div>
-            </div>
+          <h2 className="mt-4 text-fluid-section font-bold leading-tight text-brio-ink">Hacemos que lo repetitivo se haga solo o más rápido</h2>
+          <p className="mt-5 text-base text-brio-slate md:text-lg">No cambiamos lo que ya funciona. Quitamos lo que te roba tiempo y plata.</p>
+        </Reveal>
+
+        <div className="flex flex-wrap gap-2">
+          {solutions.map((it, i) => (
+            <button key={it.tab} onClick={() => setActive(i)} className={`rounded-full px-4 py-2 text-sm font-bold transition-all duration-200 ${i === active ? 'bg-brio-ink text-white shadow-hard' : 'bg-white text-brio-slate hover:text-brio-ink'}`}>
+              {it.tab}
+            </button>
           ))}
         </div>
+
+        <div className="mt-6 grid gap-6 rounded-[24px] border border-brio-border bg-white p-6 shadow-hard-sm md:grid-cols-2 md:p-10">
+          <AnimatePresence mode="wait">
+            <motion.div key={active} initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -14 }} transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}>
+              <span className="text-xs font-bold uppercase tracking-[0.16em] text-brio-plum">El dueño dice</span>
+              <p className="mt-3 text-xl font-bold leading-snug text-brio-ink md:text-2xl">“{s.quote}”</p>
+              <div className="mt-6 flex items-start gap-3 rounded-2xl bg-brio-muted p-4">
+                <span className="mt-0.5 flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-brio-terra text-brio-ink"><Icon.Check className="h-4 w-4" /></span>
+                <span className="text-sm font-semibold leading-snug text-brio-ink md:text-base">{s.solution}</span>
+              </div>
+            </motion.div>
+          </AnimatePresence>
+
+          {/* Mini panel "vivo" */}
+          <div className="flex flex-col justify-center rounded-2xl border border-brio-border bg-brio-ink-dark p-5">
+            <AnimatePresence mode="wait">
+              <motion.div key={active} initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.97 }} transition={{ duration: 0.3 }} className="space-y-3">
+                <div className="flex items-center gap-2 text-[11px] font-semibold text-white/50"><span className="h-1.5 w-1.5 rounded-full bg-brio-terra" /> Simple AI · {s.tab}</div>
+                <div className="max-w-[85%] rounded-2xl rounded-tl-sm bg-white/10 px-3.5 py-2.5 text-xs text-white/80">“{s.quote}”</div>
+                <div className="ml-auto max-w-[88%] rounded-2xl rounded-tr-sm bg-brio-terra px-3.5 py-2.5 text-xs font-medium text-brio-ink">{s.solution}</div>
+                <div className="text-right text-[10px] font-semibold text-brio-terra">⚡ resuelto automáticamente</div>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+        </div>
+        <SectionCta text="Ver qué resolvemos para tu negocio" />
       </div>
     </section>
   )
 }
 
-// 5 — Cómo trabajamos (CLARO)
+/* ------------------------------------------------------------------ */
+/*  5 — CÓMO TRABAJAMOS (stepper horizontal con mini-mocks)           */
+/* ------------------------------------------------------------------ */
+function StepMock({ n }: { n: number }) {
+  // pequeña UI decorativa distinta por paso
+  const common = 'mt-5 rounded-xl border border-brio-border bg-brio-muted p-3'
+  if (n === 0) return <div className={common}><div className="flex gap-1.5">{['Cercano', 'Vendedor', 'Formal'].map((t, i) => <span key={t} className={`rounded-full px-2 py-0.5 text-[9px] font-bold ${i === 0 ? 'bg-brio-plum text-white' : 'bg-white text-brio-slate'}`}>{t}</span>)}</div><div className="mt-2 space-y-1.5">{[0, 1].map((i) => <div key={i} className="h-2 rounded bg-brio-border" style={{ width: `${80 - i * 25}%` }} />)}</div></div>
+  if (n === 1) return <div className={common}><div className="grid grid-cols-5 gap-1">{Array.from({ length: 15 }).map((_, i) => <span key={i} className={`h-2.5 rounded-sm ${i === 9 ? 'bg-brio-terra' : 'bg-brio-border'}`} />)}</div></div>
+  if (n === 2) return <div className={common}><div className="space-y-1.5"><div className="h-2 w-2/3 rounded bg-brio-border" /><div className="h-2 w-full rounded bg-brio-terra/60" /></div><span className="mt-2 inline-block rounded-md bg-brio-terra px-2 py-0.5 text-[9px] font-bold text-brio-ink">✓ Venta cerrada</span></div>
+  if (n === 3) return <div className={common}><div className="flex items-end gap-1">{[40, 55, 45, 70, 60, 90].map((h, i) => <span key={i} className={`w-full rounded-t ${i === 5 ? 'bg-brio-terra' : 'bg-brio-plum/40'}`} style={{ height: `${h * 0.4}px` }} />)}</div></div>
+  if (n === 4) return <div className={common}><div className="space-y-1.5">{[0, 1, 2].map((i) => <div key={i} className="flex items-center gap-2"><span className="h-4 w-4 rounded-full bg-brio-plum/15" /><div className="h-2 flex-1 rounded bg-brio-border" /><Icon.Check className="h-3 w-3 text-brio-terra" /></div>)}</div></div>
+  return <div className={common}><div className="flex items-center gap-2"><span className="flex h-6 w-6 items-center justify-center rounded-full bg-brio-terra/20 text-brio-terra"><Icon.Chat className="h-3.5 w-3.5" /></span><div className="h-2 flex-1 rounded bg-brio-border" /></div></div>
+}
+
 function Process() {
   return (
-    <section id="como-trabajamos" className="section-padding relative overflow-hidden bg-brio-muted scroll-mt-20">
-      <div aria-hidden className="pointer-events-none absolute inset-0 texture-dots" />
+    <section id="como-trabajamos" className="section-padding relative overflow-hidden bg-brio-bone scroll-mt-20">
       <div className="container-x relative z-10">
-        <div className="mb-12 max-w-2xl reveal">
+        <Reveal className="mb-10 max-w-2xl">
           <Pill>Cómo trabajamos</Pill>
-          <h2 className="mt-4 text-fluid-section font-bold leading-tight text-brio-ink">
-            Miramos tu negocio por dentro antes de tocar tecnología
-          </h2>
-        </div>
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <h2 className="mt-4 text-fluid-section font-bold leading-tight text-brio-ink">Miramos tu negocio por dentro antes de tocar tecnología</h2>
+        </Reveal>
+        <Stagger className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:grid lg:grid-cols-3 lg:overflow-visible">
           {process.map((p, i) => (
-            <div key={p.n} className="reveal relative overflow-hidden rounded-[20px] border border-brio-border bg-white p-6 shadow-hard-sm" style={{ transitionDelay: `${i * 70}ms` }}>
-              <span className="pointer-events-none absolute -top-3 right-3 select-none text-7xl font-bold leading-none text-brio-terra/15">
-                {p.n}
-              </span>
-              <span className="mb-5 flex h-9 w-9 items-center justify-center rounded-full bg-brio-terra/15 text-sm font-extrabold text-brio-plum">
-                {p.n}
-              </span>
-              <h3 className="mb-2 text-lg font-bold text-brio-ink">{p.title}</h3>
-              <p className="text-sm leading-relaxed text-brio-slate">{p.body}</p>
-            </div>
+            <StaggerItem key={p.n} className="w-[78%] flex-shrink-0 snap-start sm:w-[44%] lg:w-auto">
+              <div className="flex h-full flex-col rounded-[20px] border border-brio-border bg-white p-6 shadow-hard-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-hard-lg">
+                <span className="inline-flex w-fit items-center gap-1.5 rounded-md bg-brio-plum px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-wider text-white">Paso {p.n}</span>
+                <h3 className="mt-4 text-lg font-bold leading-snug text-brio-ink">{p.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-brio-slate">{p.body}</p>
+                <StepMock n={i} />
+              </div>
+            </StaggerItem>
           ))}
-        </div>
+        </Stagger>
+        <SectionCta text="Agendar mi diagnóstico" />
       </div>
     </section>
   )
 }
 
-// 6 — Casos por rubro (OSCURO · spotlight)
+/* ------------------------------------------------------------------ */
+/*  6 — CASOS POR RUBRO (2 marquees opuestos)                         */
+/* ------------------------------------------------------------------ */
+function SectorChip({ icon: I, title, quote }: { icon: (p: IconProps) => ReactNode; title: string; quote: string }) {
+  return (
+    <div className="mx-2.5 flex w-[19rem] items-start gap-3 rounded-2xl border border-brio-border bg-white p-5 shadow-hard-sm">
+      <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl bg-brio-terra text-brio-ink">{I({ className: 'h-5 w-5' })}</span>
+      <span>
+        <span className="block text-base font-bold text-brio-ink">{title}</span>
+        <span className="mt-1 block text-sm leading-snug text-brio-slate">{quote}</span>
+      </span>
+    </div>
+  )
+}
+
 function Sectors() {
   return (
-    <section id="casos" className="section-padding relative overflow-hidden bg-brio-ink scroll-mt-20">
-      <div aria-hidden className="pointer-events-none absolute inset-0 texture-dots-dark" />
-      <div aria-hidden className="pointer-events-none absolute -bottom-24 right-[6%] h-[28rem] w-[28rem] glow-radial-jade animate-float" />
+    <section id="casos" className="section-padding relative overflow-hidden bg-brio-muted scroll-mt-20">
       <div className="container-x relative z-10">
-        <div className="mb-12 max-w-2xl reveal">
-          <Pill dark>Casos por rubro</Pill>
-          <h2 className="mt-4 font-display font-extrabold leading-tight text-white" style={{ fontSize: 'clamp(1.875rem, 4vw, 3rem)' }}>
-            Ejemplos reales de lo que podemos simplificar
-          </h2>
-        </div>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {sectors.map(({ icon: I, title, quote }, i) => (
-            <div key={title} className="reveal group rounded-2xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur-sm transition-colors duration-300 hover:border-brio-terra/50 hover:bg-white/[0.07]" style={{ transitionDelay: `${i * 60}ms` }}>
-              <span className="mb-5 flex h-11 w-11 items-center justify-center rounded-xl bg-brio-terra text-brio-ink">
-                <I className="h-5 w-5" />
-              </span>
-              <h3 className="mb-2 text-lg font-bold text-white">{title}</h3>
-              <p className="text-sm leading-relaxed text-white/65">{quote}</p>
-            </div>
-          ))}
-        </div>
+        <Reveal className="mb-10 max-w-2xl">
+          <Pill>Casos por rubro</Pill>
+          <h2 className="mt-4 text-fluid-section font-bold leading-tight text-brio-ink">Ejemplos reales de lo que podemos simplificar</h2>
+        </Reveal>
+      </div>
+      <div className="relative z-10 space-y-4" style={{ maskImage: 'linear-gradient(to right, transparent, #000 6%, #000 94%, transparent)', WebkitMaskImage: 'linear-gradient(to right, transparent, #000 6%, #000 94%, transparent)' }}>
+        <Marquee speed={40}>
+          {sectors.map((c) => <SectorChip key={c.title} {...c} />)}
+        </Marquee>
+        <Marquee speed={46} reverse>
+          {sectors.slice().reverse().map((c) => <SectorChip key={c.title} {...c} />)}
+        </Marquee>
+      </div>
+      <div className="container-x relative z-10">
+        <SectionCta text="Encontrar mi caso" />
       </div>
     </section>
   )
 }
 
-// 7 — Antes / después (CLARO)
+/* ------------------------------------------------------------------ */
+/*  7 — ANTES / DESPUÉS (diff con reveal lateral)                     */
+/* ------------------------------------------------------------------ */
 function BeforeAfter() {
   return (
     <section className="section-padding relative overflow-hidden bg-brio-bone">
       <div aria-hidden className="pointer-events-none absolute inset-0 texture-dots" />
       <div className="container-x relative z-10">
-        <div className="mb-12 max-w-2xl reveal">
+        <Reveal className="mb-12 max-w-2xl">
           <Pill>Antes / Después</Pill>
-          <h2 className="mt-4 font-bold leading-[1.1] text-brio-ink" style={{ fontSize: 'clamp(1.75rem, 5vw, 3rem)' }}>
-            El mismo negocio,<br /><span className="text-brio-slate">operando distinto</span>
-          </h2>
-        </div>
-
-        <div className="relative grid gap-5 lg:grid-cols-2">
-          {/* HOY */}
-          <div className="reveal rounded-[22px] border border-brio-border bg-white p-6 shadow-hard-sm sm:p-8">
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-brio-ink/[0.04] px-3 py-1">
-              <span className="h-2 w-2 rounded-full bg-brio-slate/50" />
-              <span className="text-xs font-bold uppercase tracking-[0.14em] text-brio-slate">Hoy</span>
+          <h2 className="mt-4 font-bold leading-[1.1] text-brio-ink" style={{ fontSize: 'clamp(1.75rem, 5vw, 3rem)' }}>El mismo negocio,<br /><span className="text-brio-slate">operando distinto</span></h2>
+        </Reveal>
+        <div className="grid gap-5 lg:grid-cols-2">
+          <Reveal>
+            <div className="h-full rounded-[22px] border border-brio-border bg-white p-6 shadow-hard-sm sm:p-8">
+              <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-brio-ink/[0.04] px-3 py-1">
+                <span className="h-2 w-2 rounded-full bg-brio-slate/50" />
+                <span className="text-xs font-bold uppercase tracking-[0.14em] text-brio-slate">Hoy</span>
+              </div>
+              <ul className="space-y-4">
+                {transformation.map((t, i) => (
+                  <li key={i} className="flex items-start gap-3 text-sm leading-snug text-brio-slate md:text-base">
+                    <span className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-brio-slate/10 text-brio-slate"><Icon.Close className="h-3 w-3" /></span>
+                    <span>{t.today}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
-            <ul className="space-y-4">
-              {transformation.map((t, i) => (
-                <li key={i} className="flex items-start gap-3 text-sm leading-snug text-brio-slate md:text-base">
-                  <span className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-brio-slate/10 text-brio-slate">
-                    <Icon.Close className="h-3 w-3" />
-                  </span>
-                  <span>{t.today}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Flecha al centro (solo desktop) */}
-          <div aria-hidden className="group absolute left-1/2 top-1/2 z-10 hidden -translate-x-1/2 -translate-y-1/2 cursor-pointer lg:flex">
-            <span className="flex h-11 w-11 items-center justify-center rounded-full border border-brio-border bg-white text-brio-plum shadow-hard transition-all duration-300 group-hover:scale-110 group-hover:border-brio-terra group-hover:bg-brio-terra group-hover:text-brio-ink">
-              <Icon.ArrowRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-0.5" />
-            </span>
-          </div>
-
-          {/* CON NEGOCIO SIMPLE */}
-          <div className="reveal rounded-[22px] border border-brio-terra/30 bg-brio-ink p-6 shadow-hard-lg sm:p-8" style={{ transitionDelay: '120ms' }}>
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-brio-terra/15 px-3 py-1">
-              <span className="h-2 w-2 rounded-full bg-brio-terra animate-pulse" />
-              <span className="text-xs font-bold uppercase tracking-[0.14em] text-brio-terra-light">Con {BRAND.short}</span>
+          </Reveal>
+          <Reveal delay={0.12}>
+            <div className="h-full rounded-[22px] border border-brio-terra/30 bg-brio-ink p-6 shadow-hard-lg sm:p-8">
+              <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-brio-terra/15 px-3 py-1">
+                <span className="h-2 w-2 rounded-full bg-brio-terra" />
+                <span className="text-xs font-bold uppercase tracking-[0.14em] text-brio-terra-light">Con {BRAND.short}</span>
+              </div>
+              <Stagger className="space-y-4">
+                {transformation.map((t, i) => (
+                  <StaggerItem key={i} y={0}>
+                    <div className="flex items-start gap-3 text-sm leading-snug text-white/85 md:text-base">
+                      <span className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-brio-terra/20 text-brio-terra-light"><Icon.Check className="h-3 w-3" /></span>
+                      <span>{t.after}</span>
+                    </div>
+                  </StaggerItem>
+                ))}
+              </Stagger>
             </div>
-            <ul className="space-y-4">
-              {transformation.map((t, i) => (
-                <li key={i} className="flex items-start gap-3 text-sm leading-snug text-white/85 md:text-base">
-                  <span className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-brio-terra/20 text-brio-terra-light">
-                    <Icon.Check className="h-3 w-3" />
-                  </span>
-                  <span>{t.after}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
+          </Reveal>
         </div>
       </div>
     </section>
   )
 }
 
-// 8 — Capacitación (CLARO)
+/* ------------------------------------------------------------------ */
+/*  8 — CAPACITAMOS (bento)                                            */
+/* ------------------------------------------------------------------ */
 function Training() {
   return (
     <section className="section-padding relative overflow-hidden bg-brio-muted">
-      <div aria-hidden className="pointer-events-none absolute inset-0 texture-dots" />
-      <div className="container-x relative z-10 grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
-        <div className="reveal">
-          <Pill>Capacitamos</Pill>
-          <h2 className="mt-4 font-bold leading-tight text-brio-ink" style={{ fontSize: 'clamp(1.75rem, 4vw, 2.75rem)' }}>
-            Tu equipo ya usa WhatsApp, Excel y celular. Ahora puede usarlos mejor.
-          </h2>
-          <p className="mt-5 max-w-md text-base text-brio-slate md:text-lg">
-            Capacitamos con casos reales de tu negocio: respuestas a clientes, pedidos,
-            inventario, reportes y seguimiento. Nada de teoría.
-          </p>
-        </div>
-        <div className="grid gap-4 sm:grid-cols-2">
-          {training.map((m, i) => (
-            <div key={i} className="reveal rounded-[20px] border border-brio-border bg-white p-6 shadow-hard-sm" style={{ transitionDelay: `${i * 70}ms` }}>
-              <span className="mb-4 flex h-9 w-9 items-center justify-center rounded-full bg-brio-terra/15 text-brio-plum">
-                <Icon.Sparkles className="h-4 w-4" />
-              </span>
-              <h3 className="mb-2 text-base font-bold text-brio-ink">{m.title}</h3>
-              <p className="text-sm leading-relaxed text-brio-slate">{m.result}</p>
+      <div className="container-x relative z-10 grid gap-5 lg:grid-cols-3">
+        <Reveal className="lg:col-span-1">
+          <div className="flex h-full flex-col justify-between rounded-[24px] bg-brio-ink p-8 text-white shadow-hard-lg">
+            <div>
+              <Pill dark>Capacitamos</Pill>
+              <h2 className="mt-4 font-bold leading-tight" style={{ fontSize: 'clamp(1.6rem, 3vw, 2.2rem)' }}>Tu equipo ya usa WhatsApp, Excel y celular. Ahora puede usarlos mejor.</h2>
+              <p className="mt-4 text-sm leading-relaxed text-white/60">Capacitamos con casos reales de tu negocio: respuestas a clientes, pedidos, inventario, reportes y seguimiento. Nada de teoría.</p>
             </div>
+            <a href={BRAND.whatsapp} target="_blank" rel="noopener noreferrer" className={btnPrimary('mt-8 w-fit')}>
+              <Icon.Whatsapp className="h-5 w-5" /> Capacitar a mi equipo
+            </a>
+          </div>
+        </Reveal>
+        <Stagger className="grid gap-5 sm:grid-cols-2 lg:col-span-2">
+          {training.map((m, i) => (
+            <StaggerItem key={i}>
+              <div className="flex h-full flex-col rounded-[20px] border border-brio-border bg-white p-6 shadow-hard-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-hard-lg">
+                <span className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-brio-terra/15 text-brio-gold-dark"><Icon.Sparkles className="h-5 w-5" /></span>
+                <h3 className="mb-2 text-base font-bold text-brio-ink">{m.title}</h3>
+                <p className="text-sm leading-relaxed text-brio-slate">{m.result}</p>
+              </div>
+            </StaggerItem>
           ))}
-        </div>
+        </Stagger>
       </div>
     </section>
   )
 }
 
-// 9 — Diagnóstico / Contacto (OSCURO · spotlight)
+/* ------------------------------------------------------------------ */
+/*  9 — TESTIMONIOS (marquee de cards)                                */
+/* ------------------------------------------------------------------ */
+function TestimonialCard({ initials, name, business, quote }: typeof testimonials[number]) {
+  return (
+    <div className="mx-2.5 flex w-[20rem] flex-col rounded-[20px] border border-brio-border bg-white p-6 shadow-hard-sm sm:w-[24rem]">
+      <span className="mb-4 text-sm tracking-wide text-brio-terra">★★★★★</span>
+      <p className="flex-1 text-sm leading-relaxed text-brio-ink md:text-base">“{quote}”</p>
+      <div className="mt-6 flex items-center gap-3 border-t border-brio-border pt-4">
+        <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-brio-plum/10 text-xs font-bold text-brio-plum">{initials}</span>
+        <span className="leading-tight">
+          <span className="block text-sm font-bold text-brio-ink">{name}</span>
+          <span className="block text-xs text-brio-slate">{business}</span>
+        </span>
+      </div>
+    </div>
+  )
+}
+
+function SocialProof() {
+  return (
+    <section className="section-padding relative overflow-hidden bg-brio-bone">
+      <div className="container-x relative z-10">
+        <Reveal className="mb-10 max-w-2xl">
+          <Pill>Casos en marcha</Pill>
+          <h2 className="mt-4 font-bold leading-tight text-brio-ink" style={{ fontSize: 'clamp(1.75rem, 4vw, 2.75rem)' }}>
+            Lo importante no es que la IA suene moderna. <span className="text-brio-plum">Es que tu equipo la use.</span>
+          </h2>
+          <p className="mt-5 text-base text-brio-slate md:text-lg">Estamos arrancando con negocios reales. Primeras mejoras en semanas, no en meses.</p>
+        </Reveal>
+      </div>
+      <div className="relative z-10" style={{ maskImage: 'linear-gradient(to right, transparent, #000 6%, #000 94%, transparent)', WebkitMaskImage: 'linear-gradient(to right, transparent, #000 6%, #000 94%, transparent)' }}>
+        <Marquee speed={38}>
+          {testimonials.map((t) => <TestimonialCard key={t.initials} {...t} />)}
+        </Marquee>
+      </div>
+    </section>
+  )
+}
+
+/* ------------------------------------------------------------------ */
+/*  10 — DIAGNÓSTICO / CONTACTO                                        */
+/* ------------------------------------------------------------------ */
 function Contact() {
   return (
     <section id="contacto" className="section-padding relative overflow-hidden bg-brio-ink scroll-mt-20">
       <div aria-hidden className="pointer-events-none absolute inset-0 texture-dots-dark" />
-      <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute -top-20 right-[10%] h-[28rem] w-[28rem] glow-radial-terra animate-float-slow" />
-        <div className="absolute -bottom-24 left-[5%] h-[24rem] w-[24rem] glow-radial-jade animate-float" />
-      </div>
+      <Parallax amount={50} className="pointer-events-none absolute -top-20 right-[10%] h-[28rem] w-[28rem] glow-radial-terra" />
       <div className="container-x relative z-10">
         <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
-          <div className="reveal">
+          <Reveal>
             <Pill dark>Diagnóstico gratis</Pill>
-            <h2 className="mt-4 font-display font-extrabold leading-tight text-white" style={{ fontSize: 'clamp(1.875rem, 4vw, 3rem)' }}>
-              Descubre qué ordenar primero en tu negocio
-            </h2>
-            <p className="mt-5 max-w-md text-white/65">
-              En unos minutos detectamos dónde pierdes tiempo o plata. Sin compromiso y
-              sin lenguaje técnico. Lo más fácil es escribirnos por WhatsApp.
-            </p>
+            <h2 className="mt-4 font-display font-extrabold leading-tight text-white" style={{ fontSize: 'clamp(1.875rem, 4vw, 3rem)' }}>Descubre qué ordenar primero en tu negocio</h2>
+            <p className="mt-5 max-w-md text-white/65">En unos minutos detectamos dónde pierdes tiempo o plata. Sin compromiso y sin lenguaje técnico. Lo más fácil es escribirnos por WhatsApp.</p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <a href={BRAND.whatsapp} target="_blank" rel="noopener noreferrer" className={btnGreen('px-6 py-4')}>
-                <Icon.Whatsapp className="h-5 w-5" />
-                WhatsApp directo
-              </a>
-              <a href={`mailto:${BRAND.email}`} className="inline-flex items-center justify-center gap-2 rounded-xl bg-white/10 px-6 py-4 text-sm font-bold text-white ring-1 ring-white/15 transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/15">
-                <Icon.Mail className="h-5 w-5" />
-                {BRAND.email}
-              </a>
+              <a href={BRAND.whatsapp} target="_blank" rel="noopener noreferrer" className={btnPrimary('px-6 py-4')}><Icon.Whatsapp className="h-5 w-5" /> WhatsApp directo</a>
+              <a href={`mailto:${BRAND.email}`} className="inline-flex items-center justify-center gap-2 rounded-xl bg-white/10 px-6 py-4 text-sm font-bold text-white ring-1 ring-white/15 transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/15"><Icon.Mail className="h-5 w-5" /> {BRAND.email}</a>
             </div>
-          </div>
-
-          <form className="reveal rounded-[24px] border border-white/10 bg-white/[0.04] p-6 backdrop-blur-sm sm:p-8" onSubmit={(e) => e.preventDefault()}>
-            <div className="space-y-5">
-              <div>
-                <label className="mb-2 block text-xs font-medium uppercase tracking-wide text-white/50">¿Qué tipo de negocio tienes?</label>
-                <input type="text" className="w-full rounded-xl border border-white/10 bg-brio-ink-dark/60 px-4 py-3.5 text-sm text-white placeholder-white/30 outline-none transition-colors focus:border-brio-terra" placeholder="Bodega, restaurante, tienda de ropa..." />
+          </Reveal>
+          <Reveal delay={0.1}>
+            <form className="rounded-[24px] border border-white/10 bg-white/[0.04] p-6 backdrop-blur-sm sm:p-8" onSubmit={(e) => e.preventDefault()}>
+              <div className="space-y-5">
+                <div>
+                  <label className="mb-2 block text-xs font-medium uppercase tracking-wide text-white/50">¿Qué tipo de negocio tienes?</label>
+                  <input type="text" className="w-full rounded-xl border border-white/10 bg-brio-ink-dark/60 px-4 py-3.5 text-sm text-white placeholder-white/30 outline-none transition-colors focus:border-brio-terra" placeholder="Bodega, restaurante, tienda de ropa..." />
+                </div>
+                <div>
+                  <label className="mb-2 block text-xs font-medium uppercase tracking-wide text-white/50">Tu WhatsApp</label>
+                  <input type="tel" className="w-full rounded-xl border border-white/10 bg-brio-ink-dark/60 px-4 py-3.5 text-sm text-white placeholder-white/30 outline-none transition-colors focus:border-brio-terra" placeholder="+51 999 999 999" />
+                </div>
+                <div>
+                  <label className="mb-2 block text-xs font-medium uppercase tracking-wide text-white/50">¿Qué es lo que más tiempo te quita?</label>
+                  <textarea rows={3} className="w-full resize-none rounded-xl border border-white/10 bg-brio-ink-dark/60 px-4 py-3.5 text-sm text-white placeholder-white/30 outline-none transition-colors focus:border-brio-terra" placeholder="Cuéntanos en una línea..." />
+                </div>
+                <button type="submit" className={btnPrimary('mt-1 w-full')}>Hacer mi diagnóstico <Icon.ArrowRight className="h-4 w-4" /></button>
               </div>
-              <div>
-                <label className="mb-2 block text-xs font-medium uppercase tracking-wide text-white/50">Tu WhatsApp</label>
-                <input type="tel" className="w-full rounded-xl border border-white/10 bg-brio-ink-dark/60 px-4 py-3.5 text-sm text-white placeholder-white/30 outline-none transition-colors focus:border-brio-terra" placeholder="+51 999 999 999" />
-              </div>
-              <div>
-                <label className="mb-2 block text-xs font-medium uppercase tracking-wide text-white/50">¿Qué es lo que más tiempo te quita?</label>
-                <textarea rows={3} className="w-full resize-none rounded-xl border border-white/10 bg-brio-ink-dark/60 px-4 py-3.5 text-sm text-white placeholder-white/30 outline-none transition-colors focus:border-brio-terra" placeholder="Cuéntanos en una línea..." />
-              </div>
-              <button type="submit" className={btnGreen('mt-1 w-full')}>
-                Hacer mi diagnóstico
-                <Icon.ArrowRight className="h-4 w-4" />
-              </button>
-            </div>
-          </form>
+            </form>
+          </Reveal>
         </div>
       </div>
     </section>
@@ -883,98 +797,76 @@ function Contact() {
 
 function FounderAvatar({ photo, initials, ring }: { photo: string; initials: string; ring: string }) {
   const [failed, setFailed] = useState(false)
-  const base =
-    'h-28 w-28 flex-shrink-0 rounded-full object-cover ring-4 ring-offset-4 ring-offset-brio-bone'
-  if (failed) {
-    return (
-      <span className={`flex items-center justify-center text-2xl font-extrabold text-brio-ink ${base} ${ring}`}>
-        {initials}
-      </span>
-    )
-  }
-  return (
-    <img
-      src={photo}
-      alt=""
-      loading="lazy"
-      onError={() => setFailed(true)}
-      className={`${base} ${ring}`}
-    />
-  )
+  const base = 'h-28 w-28 flex-shrink-0 rounded-full object-cover ring-4 ring-offset-4 ring-offset-brio-bone'
+  if (failed) return <span className={`flex items-center justify-center text-2xl font-extrabold text-brio-ink ${base} ${ring}`}>{initials}</span>
+  return <img src={photo} alt="" loading="lazy" onError={() => setFailed(true)} className={`${base} ${ring}`} />
 }
 
-// 10 — Nosotros (CLARO)
+/* ------------------------------------------------------------------ */
+/*  11 — NOSOTROS                                                      */
+/* ------------------------------------------------------------------ */
 function Team() {
   return (
     <section id="equipo" className="section-padding bg-brio-bone scroll-mt-20">
       <div className="container-x">
-        <div className="mb-12 max-w-2xl reveal">
+        <Reveal className="mb-12 max-w-2xl">
           <Pill>Nosotros</Pill>
-          <h2 className="mt-4 text-fluid-section font-bold leading-tight text-brio-ink">
-            Gente que entra a tu operación y resuelve contigo
-          </h2>
-          <p className="mt-4 max-w-xl text-brio-slate">
-            Hablamos como socio operativo, no como proveedor técnico. Negocio y
-            tecnología en la misma mesa.
-          </p>
-        </div>
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-          {founders.map((f, i) => (
-            <div key={f.name} className="reveal flex flex-col items-center rounded-[20px] border border-brio-border bg-white p-8 text-center shadow-hard-sm" style={{ transitionDelay: `${i * 100}ms` }}>
-              <FounderAvatar photo={f.photo} initials={f.initials} ring={f.ring} />
-              <h3 className="mt-6 text-xl font-bold text-brio-ink">{f.name}</h3>
-              <p className="mt-1 font-mono text-xs font-medium uppercase tracking-[0.14em] text-brio-plum">
-                {f.role}
-              </p>
-              <p className="mt-4 max-w-xs text-sm leading-relaxed text-brio-slate">{f.bio}</p>
-              <a
-                href="#"
-                aria-label={`LinkedIn de ${f.name}`}
-                className="mt-5 inline-flex h-9 w-9 items-center justify-center rounded-full border border-brio-border text-brio-slate/60 transition-colors hover:border-brio-terra hover:text-brio-plum"
-              >
-                <Icon.Linkedin className="h-4 w-4" />
-              </a>
-            </div>
+          <h2 className="mt-4 text-fluid-section font-bold leading-tight text-brio-ink">Gente que entra a tu operación y resuelve contigo</h2>
+          <p className="mt-4 max-w-xl text-brio-slate">Hablamos como socio operativo, no como proveedor técnico. Negocio y tecnología en la misma mesa.</p>
+        </Reveal>
+        <Stagger className="mx-auto grid max-w-3xl grid-cols-1 gap-6 sm:grid-cols-2">
+          {founders.map((f) => (
+            <StaggerItem key={f.name}>
+              <div className="flex h-full flex-col items-center rounded-[20px] border border-brio-border bg-white p-8 text-center shadow-hard-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-hard-lg">
+                <FounderAvatar photo={f.photo} initials={f.initials} ring={f.ring} />
+                <h3 className="mt-6 text-xl font-bold text-brio-ink">{f.name}</h3>
+                <p className="mt-1 font-mono text-xs font-medium uppercase tracking-[0.14em] text-brio-plum">{f.role}</p>
+                <p className="mt-4 max-w-xs text-sm leading-relaxed text-brio-slate">{f.bio}</p>
+                <a href="#" aria-label={`LinkedIn de ${f.name}`} className="mt-5 inline-flex h-9 w-9 items-center justify-center rounded-full border border-brio-border text-brio-slate/60 transition-colors hover:border-brio-plum hover:text-brio-plum"><Icon.Linkedin className="h-4 w-4" /></a>
+              </div>
+            </StaggerItem>
           ))}
-        </div>
+        </Stagger>
       </div>
     </section>
   )
 }
 
-// 11 — FAQ (CLARO)
+/* ------------------------------------------------------------------ */
+/*  12 — FAQ (acordeón con motion)                                     */
+/* ------------------------------------------------------------------ */
+function FaqItem({ q, a }: { q: string; a: string }) {
+  const [open, setOpen] = useState(false)
+  return (
+    <div className="overflow-hidden rounded-2xl border border-brio-border bg-white shadow-hard-sm">
+      <button onClick={() => setOpen((v) => !v)} className="flex w-full items-center gap-3 px-5 py-4 text-left">
+        <h3 className="flex-1 font-bold text-brio-ink">{q}</h3>
+        <motion.span animate={{ rotate: open ? 180 : 0 }} transition={{ duration: 0.3 }} className={open ? 'text-brio-plum' : 'text-brio-slate/50'}><Icon.ChevronDown className="h-5 w-5" /></motion.span>
+      </button>
+      <AnimatePresence initial={false}>
+        {open && (
+          <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }} className="overflow-hidden">
+            <p className="px-5 pb-5 text-sm leading-relaxed text-brio-slate">{a}</p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  )
+}
+
 function Faq() {
   return (
     <section className="section-padding bg-brio-muted">
       <div className="container-x">
-        <div className="mb-12 max-w-2xl reveal">
+        <Reveal className="mb-12 max-w-2xl">
           <Pill>Preguntas frecuentes</Pill>
-          <h2 className="mt-4 text-fluid-section font-bold leading-tight text-brio-ink">
-            Preguntas honestas, respuestas honestas
-          </h2>
-        </div>
-        <div className="grid max-w-5xl gap-3 md:grid-cols-2 md:items-start">
+          <h2 className="mt-4 text-fluid-section font-bold leading-tight text-brio-ink">Preguntas honestas, respuestas honestas</h2>
+        </Reveal>
+        <Stagger className="grid max-w-5xl gap-3 md:grid-cols-2 md:items-start">
           {faqs.map((f, i) => (
-            <div
-              key={i}
-              className="reveal group cursor-pointer overflow-hidden rounded-2xl border border-brio-border bg-white shadow-hard-sm transition-colors duration-300 hover:border-brio-terra/60"
-              style={{ transitionDelay: `${i * 60}ms` }}
-            >
-              <div className="flex items-center gap-3 px-5 py-4">
-                <h3 className="flex-1 font-bold text-brio-ink">{f.q}</h3>
-                <Icon.ChevronDown className="h-5 w-5 flex-shrink-0 text-brio-slate/50 transition-transform duration-300 group-hover:rotate-180 group-hover:text-brio-plum" />
-              </div>
-              {/* grid-rows 0fr → 1fr anima la altura al hacer hover */}
-              <div className="grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-out group-hover:grid-rows-[1fr]">
-                <div className="overflow-hidden">
-                  <p className="px-5 pb-5 text-sm leading-relaxed text-brio-slate">
-                    {f.a}
-                  </p>
-                </div>
-              </div>
-            </div>
+            <StaggerItem key={i}><FaqItem q={f.q} a={f.a} /></StaggerItem>
           ))}
-        </div>
+        </Stagger>
       </div>
     </section>
   )
@@ -985,32 +877,19 @@ function Footer() {
     <footer className="bg-brio-ink-dark py-12">
       <div className="container-x flex flex-col items-center justify-between gap-6 sm:flex-row">
         <Logo dark />
-        <p className="text-sm text-white/40">
-          © {new Date().getFullYear()} {BRAND.name}. {BRAND.tagline}
-        </p>
+        <p className="text-sm text-white/40">© {new Date().getFullYear()} {BRAND.name}. {BRAND.tagline}</p>
         <div className="flex items-center gap-4 text-white/50">
-          <a href={BRAND.whatsapp} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="transition-colors hover:text-brio-terra">
-            <Icon.Whatsapp className="h-5 w-5" />
-          </a>
-          <a href={`mailto:${BRAND.email}`} aria-label="Correo" className="transition-colors hover:text-brio-terra">
-            <Icon.Mail className="h-5 w-5" />
-          </a>
+          <a href={BRAND.whatsapp} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="transition-colors hover:text-brio-terra"><Icon.Whatsapp className="h-5 w-5" /></a>
+          <a href={`mailto:${BRAND.email}`} aria-label="Correo" className="transition-colors hover:text-brio-terra"><Icon.Mail className="h-5 w-5" /></a>
         </div>
       </div>
     </footer>
   )
 }
 
-// Botón flotante de WhatsApp (fijo en toda la web, como Platzi).
 function FloatingWhatsApp() {
   return (
-    <a
-      href={BRAND.whatsapp}
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label="Escríbenos por WhatsApp"
-      className="group fixed bottom-6 right-6 z-50 flex h-16 w-16 items-center justify-center rounded-full bg-[#25D366] text-white shadow-hard-lg transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#1EBE57]"
-    >
+    <a href={BRAND.whatsapp} target="_blank" rel="noopener noreferrer" aria-label="Escríbenos por WhatsApp" className="group fixed bottom-6 right-6 z-50 flex h-16 w-16 items-center justify-center rounded-full bg-[#25D366] text-white shadow-hard-lg transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#1EBE57]">
       <span className="absolute inset-0 rounded-full bg-[#25D366]/40 animate-ping" style={{ animationDuration: '2.5s' }} />
       <Icon.Whatsapp className="relative h-9 w-9" />
     </a>
@@ -1020,9 +899,7 @@ function FloatingWhatsApp() {
 /* ------------------------------------------------------------------ */
 /*  Páginas                                                            */
 /* ------------------------------------------------------------------ */
-// Inicio — TODO el contenido de ahora vive aquí (ruta por defecto "/")
 function Home() {
-  useScrollReveal()
   return (
     <main>
       <Hero />
@@ -1033,6 +910,7 @@ function Home() {
       <Sectors />
       <BeforeAfter />
       <Training />
+      <SocialProof />
       <Contact />
       <Team />
       <Faq />
@@ -1040,32 +918,21 @@ function Home() {
   )
 }
 
-// Página placeholder para las rutas que todavía no construimos.
 function ComingSoon({ title }: { title: string }) {
   return (
     <main className="section-padding bg-brio-bone">
       <div className="container-x flex min-h-[70vh] flex-col items-center justify-center pt-20 text-center">
-        <span className="mb-5 inline-flex items-center gap-2 rounded-full bg-brio-terra/15 px-3 py-1 text-xs font-bold uppercase tracking-[0.14em] text-brio-plum">
-          <span className="h-1.5 w-1.5 rounded-full bg-brio-terra animate-pulse" />
-          Próximamente
+        <span className="mb-5 inline-flex items-center gap-2 rounded-full bg-brio-terra/15 px-3 py-1 text-xs font-bold uppercase tracking-[0.14em] text-brio-gold-dark">
+          <span className="h-1.5 w-1.5 rounded-full bg-brio-terra" /> Próximamente
         </span>
         <h1 className="font-display text-3xl font-extrabold text-brio-ink md:text-5xl">{title}</h1>
-        <p className="mt-4 max-w-md text-brio-slate">
-          Esta página aún no existe. Por ahora todo el contenido vive en Inicio;
-          pronto le damos el suyo.
-        </p>
-        <Link to="/" className={btnGreen('mt-8')}>
-          Volver a Inicio
-          <Icon.ArrowRight className="h-4 w-4" />
-        </Link>
+        <p className="mt-4 max-w-md text-brio-slate">Esta página aún no existe. Por ahora todo el contenido vive en Inicio; pronto le damos el suyo.</p>
+        <Link to="/" className={btnPrimary('mt-8')}>Volver a Inicio <Icon.ArrowRight className="h-4 w-4" /></Link>
       </div>
     </main>
   )
 }
 
-/* ------------------------------------------------------------------ */
-/*  App — router. Header y Footer son layout compartido por toda ruta. */
-/* ------------------------------------------------------------------ */
 export default function App() {
   return (
     <BrowserRouter>
@@ -1073,11 +940,7 @@ export default function App() {
       <div className="min-h-screen w-full">
         <Header />
         <Routes>
-          {/* Inicio — la única página real por ahora */}
           <Route path="/" element={<Home />} />
-
-          {/* Rutas aún sin construir. Reemplaza <ComingSoon> por su
-              componente real cuando creemos cada página. */}
           <Route path="/resolvemos" element={<ComingSoon title="Qué resolvemos" />} />
           <Route path="/como-trabajamos" element={<ComingSoon title="Cómo trabajamos" />} />
           <Route path="/casos" element={<ComingSoon title="Casos" />} />
