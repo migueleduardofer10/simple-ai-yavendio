@@ -241,4 +241,4 @@ export function Tilt({
 }
 
 /* Re-export motion para usar motion.* directamente donde haga falta */
-export { motion, useReducedMotion, AnimatePresence } from 'motion/react'
+export { motion, useReducedMotion, AnimatePresence, useMotionValue, useSpring } from 'motion/react'

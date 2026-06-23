@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
 import { BrowserRouter, Routes, Route, NavLink, Link, useLocation } from 'react-router-dom'
 import {
@@ -11,7 +11,11 @@ import {
   Tilt,
   motion,
   AnimatePresence,
+  useMotionValue,
+  useSpring,
 } from './motion'
+import witchImage from './assets/images/witch.png'
+import witchKeepingImage from './assets/images/witch-keeping.png'
 
 /* ------------------------------------------------------------------ */
 /*  Marca — cambia el nombre / contacto en UN solo lugar               */
@@ -147,12 +151,12 @@ const pains = [
 ]
 
 const solutions = [
-  { tab: 'Atención', quote: 'Me preguntan todo el día precio, talla, stock o disponibilidad.', solution: 'Respuestas asistidas y un catálogo simple conectado a WhatsApp.' },
-  { tab: 'Stock', quote: 'Me doy cuenta que falta mercadería cuando el cliente ya la pidió.', solution: 'Alertas de reposición y reporte de tus productos más vendidos.' },
-  { tab: 'Caja', quote: 'Cierro el día y recién trato de entender cuánto vendí.', solution: 'Resumen diario automático de ventas, pagos, pedidos y pendientes.' },
-  { tab: 'Clientes', quote: 'Me escriben, preguntan y después se pierden.', solution: 'Recordatorios para volver a contactar a clientes interesados.' },
-  { tab: 'Compras', quote: 'Compro por intuición y a veces sobra o falta.', solution: 'Lista de compras sugerida según ventas, temporada y rotación.' },
-  { tab: 'Equipo', quote: 'A mi equipo le cuesta usar herramientas nuevas.', solution: 'Capacitación con casos reales y herramientas simples, no sistemas.' },
+  { tab: 'Atención', quote: 'Me preguntan todo el día precio, talla, stock o disponibilidad.', solution: 'Respuestas asistidas y un catálogo simple conectado a WhatsApp.', exampleFrom: 'Cliente · 8:47 p.m.', exampleAsk: 'Hola, ¿tienes la casaca negra en M? ¿Cuánto está y haces delivery?', exampleDone: 'Respuesta lista: stock disponible, precio, link de pago y tiempo de entrega.' },
+  { tab: 'Stock', quote: 'Me doy cuenta que falta mercadería cuando el cliente ya la pidió.', solution: 'Alertas de reposición y reporte de tus productos más vendidos.', exampleFrom: 'Alerta de tienda · 6:15 p.m.', exampleAsk: 'Quedan 3 unidades de lo que más se vende el fin de semana.', exampleDone: 'Compra sugerida: reponer 24 unidades antes del viernes.' },
+  { tab: 'Caja', quote: 'Cierro el día y recién trato de entender cuánto vendí.', solution: 'Resumen diario automático de ventas, pagos, pedidos y pendientes.', exampleFrom: 'Cierre de caja · 10:02 p.m.', exampleAsk: 'Hoy hubo efectivo, Yape, transferencias y dos pedidos pendientes.', exampleDone: 'Resumen listo: ventas, pagos por canal, pendientes y diferencia por revisar.' },
+  { tab: 'Clientes', quote: 'Me escriben, preguntan y después se pierden.', solution: 'Recordatorios para volver a contactar a clientes interesados.', exampleFrom: 'Seguimiento · 11:30 a.m.', exampleAsk: '3 clientes preguntaron precio ayer y no respondieron después.', exampleDone: 'Mensajes preparados para retomar la conversación sin sonar insistente.' },
+  { tab: 'Academia', quote: 'Se me mezclan alumnos, pagos, horarios y consultas por todos lados.', solution: 'Control simple de alumnos, pagos pendientes, clases y mensajes frecuentes.', exampleFrom: 'Academia · 7:30 p.m.', exampleAsk: 'Un papá pregunta horario, otro debe mensualidad y hay alumnos por confirmar.', exampleDone: 'Resumen listo: pagos pendientes, clases de mañana y mensajes para enviar.' },
+  { tab: 'Equipo', quote: 'A mi equipo le cuesta usar herramientas nuevas.', solution: 'Capacitación con casos reales y herramientas simples, no sistemas.', exampleFrom: 'Equipo · hora punta', exampleAsk: 'Cada vendedor anota pedidos distinto y después nadie encuentra nada.', exampleDone: 'Flujo único: cómo responder, registrar pedido y marcar estado en 3 pasos.' },
 ]
 
 const process = [
@@ -182,9 +186,9 @@ const transformation = [
 
 const trainingOrbit = [
   { icon: Icon.Whatsapp, label: 'WhatsApp', phrase: 'Responde clientes sin copiar y pegar', x: '14%', y: '60%', color: 'text-[#25D366]', delay: 0 },
-  { icon: Icon.Instagram, label: 'Instagram', phrase: 'Convierte mensajes en ventas', x: '67%', y: '45%', color: 'text-brio-plum', delay: 0.18 },
-  { icon: Icon.Chart, label: 'Excel', phrase: 'Reportes claros al cierre del día', x: '29%', y: '18%', color: 'text-brio-gold-dark', delay: 0.32 },
-  { icon: Icon.Folder, label: 'Sheets', phrase: 'Stock y pedidos siempre ordenados', x: '82%', y: '22%', color: 'text-brio-plum', delay: 0.48 },
+  { icon: Icon.Instagram, label: 'Instagram', phrase: 'Convierte mensajes en ventas', x: '65%', y: '54%', color: 'text-brio-plum', delay: 0.18 },
+  { icon: Icon.Chart, label: 'Excel', phrase: 'Reportes claros al cierre del día', x: '20%', y: '18%', color: 'text-brio-gold-dark', delay: 0.32 },
+  { icon: Icon.Folder, label: 'Sheets', phrase: 'Stock y pedidos siempre ordenados', x: '70%', y: '14%', color: 'text-brio-plum', delay: 0.48 },
 ]
 
 const testimonials = [
@@ -471,20 +475,67 @@ function Pains() {
 /*  3 — LO SIMPLE GANA (manifiesto full-bleed)                         */
 /* ------------------------------------------------------------------ */
 function Simplicity() {
+  const simpleIdeas = [
+    { text: 'Si una hoja de cálculo resuelve, la mejoramos.', className: 'left-0 top-[34%] md:left-[4%] md:top-[38%]', delay: 0 },
+    { text: 'WhatsApp más inteligente, sin cambiar tu canal.', className: 'right-0 top-[30%] md:right-[3%] md:top-[36%]', delay: 0.15 },
+    { text: 'Si necesitas un sistema, lo construimos.', className: 'left-[8%] bottom-[24%] md:left-[14%] md:bottom-[22%]', delay: 0.3 },
+    { text: 'Pero no empezamos por ahí.', className: 'right-[8%] bottom-[22%] md:right-[14%] md:bottom-[20%]', delay: 0.45 },
+  ]
+
   return (
-    <section className="relative overflow-hidden bg-brio-ink py-28 md:py-40">
+    <section className="relative overflow-hidden bg-brio-ink pt-24 pb-0 md:pt-32">
       <div aria-hidden className="pointer-events-none absolute inset-0 texture-dots-dark" />
       <Parallax amount={60} className="pointer-events-none absolute -top-24 left-1/2 h-[34rem] w-[34rem] -translate-x-1/2 glow-radial-terra" />
       <div className="container-x relative z-10">
-        <Reveal className="mx-auto max-w-4xl text-center">
-          <Pill dark>Lo simple gana</Pill>
-          <h2 className="mt-6 font-display font-extrabold leading-[1.08] text-white" style={{ fontSize: 'clamp(2rem, 5vw, 3.6rem)' }}>
-            No todo necesita un sistema. A veces solo hay que <span className="text-gradient">ordenar bien lo que ya usas.</span>
-          </h2>
-          <p className="mx-auto mt-7 max-w-2xl text-base leading-relaxed text-white/65 md:text-lg">
-            Si una hoja de cálculo resuelve, la mejoramos. Si WhatsApp es tu canal de venta, lo hacemos más inteligente. Si necesitas un sistema, lo construimos. Pero no empezamos por ahí. <span className="font-semibold text-white/90">Cobramos por resolver, no por complicarte.</span>
-          </p>
-        </Reveal>
+        <div className="relative mx-auto min-h-[50rem] max-w-6xl md:min-h-[58rem]">
+          <Reveal className="relative z-20 mx-auto max-w-5xl text-center -mt-8">
+            <Pill dark>Lo simple gana</Pill>
+            <h2 className="relative z-20 mx-auto mt-6 max-w-4xl font-display font-extrabold leading-[1.08] text-white" style={{ fontSize: 'clamp(2.1rem, 5.1vw, 3.8rem)' }}>
+              No todo necesita un sistema. A veces solo hay que <span className="text-gradient">ordenar bien lo que ya usas.</span>
+            </h2>
+          </Reveal>
+
+          <div className="pointer-events-none absolute inset-0 z-10">
+            {simpleIdeas.map((idea) => (
+              <motion.div
+                key={idea.text}
+                className={`absolute max-w-[15rem] rounded-2xl border border-white/10 bg-white/[0.07] px-4 py-3 text-left text-xs !font-thin leading-snug text-white shadow-hard-lg backdrop-blur-sm md:max-w-[17rem] md:text-sm ${idea.className}`}
+                initial={{ opacity: 0, y: 18, scale: 0.94 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                viewport={{ once: true, margin: '-15%' }}
+                animate={{ y: [0, -10, 0], rotate: [-0.6, 0.6, -0.6] }}
+                transition={{ duration: 0.6, delay: idea.delay, ease: [0.16, 1, 0.3, 1], y: { duration: 5 + idea.delay * 2, repeat: Infinity, ease: 'easeInOut' }, rotate: { duration: 6 + idea.delay * 2, repeat: Infinity, ease: 'easeInOut' } }}
+              >
+                {idea.text}
+              </motion.div>
+            ))}
+          </div>
+
+          <Reveal className="absolute inset-x-0 bottom-0 z-0 flex flex-col items-center" delay={0.08}>
+            <div className="absolute bottom-0 left-1/2 h-96 w-96 -translate-x-1/2 rounded-full bg-brio-terra/15 blur-3xl" />
+            <motion.img
+              src={witchKeepingImage}
+              alt="Asistente Simple AI sosteniendo la idea principal"
+              className="relative block w-80 drop-shadow-[0_36px_60px_rgba(245,225,78,0.18)] sm:w-[28rem] md:w-[36rem]"
+              style={{ display: 'block', marginBottom: 0 }}
+              animate={{ y: [0, -10, 0], rotate: [-1, 1, -1] }}
+              transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+            />
+          </Reveal>
+
+          <motion.div
+            className="absolute bottom-[5%] left-[20%] z-20 rounded-2xl border border-brio-terra/40 bg-white/[0.07] px-4 py-3 text-center text-xs font-bold leading-snug text-white shadow-hard-lg backdrop-blur-sm md:left-[38%] md:text-sm"
+            style={{ maxWidth: '17rem' }}
+            initial={{ opacity: 0, y: 18, scale: 0.94 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            viewport={{ once: true, margin: '-15%' }}
+            animate={{ y: [0, -10, 0], rotate: [-0.6, 0.6, -0.6] }}
+            transition={{ duration: 0.6, delay: 0.55, ease: [0.16, 1, 0.3, 1], y: { duration: 5.5, repeat: Infinity, ease: 'easeInOut' }, rotate: { duration: 6.5, repeat: Infinity, ease: 'easeInOut' } }}
+          >
+            <span className="text-gradient">Cobramos por resolver,</span>{' '}
+            <span className="text-white/90">no por complicarte.</span>
+          </motion.div>
+        </div>
       </div>
     </section>
   )
@@ -530,10 +581,10 @@ function Solutions() {
           <div className="flex flex-col justify-center rounded-2xl border border-brio-border bg-brio-ink-dark p-5">
             <AnimatePresence mode="wait">
               <motion.div key={active} initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.97 }} transition={{ duration: 0.3 }} className="space-y-3">
-                <div className="flex items-center gap-2 text-[11px] font-semibold text-white/50"><span className="h-1.5 w-1.5 rounded-full bg-brio-terra" /> Simple AI · {s.tab}</div>
-                <div className="max-w-[85%] rounded-2xl rounded-tl-sm bg-white/10 px-3.5 py-2.5 text-xs text-white/80">“{s.quote}”</div>
-                <div className="ml-auto max-w-[88%] rounded-2xl rounded-tr-sm bg-brio-terra px-3.5 py-2.5 text-xs font-medium text-brio-ink">{s.solution}</div>
-                <div className="text-right text-[10px] font-semibold text-brio-terra">⚡ resuelto automáticamente</div>
+                <div className="flex items-center gap-2 text-[11px] font-semibold text-white/50"><span className="h-1.5 w-1.5 rounded-full bg-brio-terra" /> {s.exampleFrom}</div>
+                <div className="max-w-[86%] rounded-2xl rounded-tl-sm bg-white/10 px-3.5 py-2.5 text-xs leading-relaxed text-white/80">{s.exampleAsk}</div>
+                <div className="ml-auto max-w-[90%] rounded-2xl rounded-tr-sm bg-brio-terra px-3.5 py-2.5 text-xs font-medium leading-relaxed text-brio-ink">{s.exampleDone}</div>
+                <div className="text-right text-[10px] font-semibold text-brio-terra">listo para usar en el día a día</div>
               </motion.div>
             </AnimatePresence>
           </div>
@@ -680,8 +731,21 @@ function BeforeAfter() {
 /*  8 — CAPACITAMOS (bento)                                            */
 /* ------------------------------------------------------------------ */
 function Training() {
+  const sectionRef = useRef<HTMLElement>(null)
+  const rawX = useMotionValue(0)
+  const rawY = useMotionValue(0)
+  const glowX = useSpring(rawX, { stiffness: 280, damping: 28 })
+  const glowY = useSpring(rawY, { stiffness: 280, damping: 28 })
+
+  function handleMouseMove(e: React.MouseEvent<HTMLElement>) {
+    const rect = sectionRef.current?.getBoundingClientRect()
+    if (!rect) return
+    rawX.set(e.clientX - rect.left)
+    rawY.set(e.clientY - rect.top)
+  }
+
   return (
-    <section className="relative overflow-hidden bg-brio-bone py-20 md:py-24">
+    <section ref={sectionRef} onMouseMove={handleMouseMove} className="relative overflow-hidden bg-brio-bone py-20 md:py-24">
       <svg aria-hidden viewBox="0 0 1200 760" preserveAspectRatio="none" className="absolute inset-x-[-10%] inset-y-0 h-full w-[120%] text-brio-ink">
         <defs>
           <pattern id="training-paint-dots" width="22" height="22" patternUnits="userSpaceOnUse">
@@ -703,7 +767,10 @@ function Training() {
           d="M-90 38C-35 18 18 31 72 18C119 7 161 43 209 27C267 8 323 29 382 14C438 0 488 34 548 20C606 7 655 47 716 31C776 15 833 42 889 21C949 -2 1000 32 1054 22C1133 8 1204 43 1290 30V717C1227 733 1172 705 1113 722C1063 736 1014 699 963 718C906 739 853 703 798 727C738 753 682 710 623 730C561 751 514 711 454 726C391 742 337 700 276 718C217 736 163 700 105 724C43 750-19 714-90 731V38Z"
         />
       </svg>
-      <div className="absolute left-1/2 top-16 h-[30rem] w-[30rem] -translate-x-1/2 rounded-full bg-brio-terra/20 blur-3xl" />
+      <motion.div
+        className="pointer-events-none absolute h-[26rem] w-[26rem] rounded-full bg-brio-terra/20 blur-3xl"
+        style={{ left: glowX, top: glowY, translateX: '-50%', translateY: '-50%' }}
+      />
       <div className="absolute -right-24 bottom-20 h-80 w-80 rounded-full bg-brio-plum/30 blur-3xl" />
       <div className="container-x relative z-10">
         <Reveal className="mx-auto max-w-3xl text-center">
@@ -752,13 +819,13 @@ function Training() {
                 animate={{ translateY: [0, -10, 0] }}
                 transition={{ duration: 0.7, delay: item.delay, ease: [0.16, 1, 0.3, 1], translateY: { duration: 4 + item.delay * 4, repeat: Infinity, ease: 'easeInOut' } }}
               >
-                <div className="group flex items-center gap-3 rounded-2xl border border-white/10 bg-white/95 p-2.5 pr-4 shadow-hard-lg backdrop-blur transition-transform duration-300 hover:-translate-y-1">
-                  <span className={`flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full bg-brio-muted ${item.color} shadow-hard-sm ring-1 ring-brio-border`}>
+                <div className="group flex h-24 w-52 items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.07] p-2.5 pr-4 shadow-hard-lg backdrop-blur-sm transition-transform duration-300 hover:-translate-y-1">
+                  <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full bg-white/10 text-brio-terra">
                     <OrbitIcon className="h-5 w-5" />
                   </span>
                   <span className="min-w-0">
-                    <span className="block font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-brio-plum">{item.label}</span>
-                    <span className="mt-0.5 block text-xs font-bold leading-snug text-brio-ink sm:text-sm">{item.phrase}</span>
+                    <span className="block font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-brio-terra">{item.label}</span>
+                    <span className="mt-0.5 block text-xs font-bold leading-snug text-white sm:text-sm">{item.phrase}</span>
                   </span>
                 </div>
               </motion.div>
@@ -826,36 +893,93 @@ function Contact() {
       <div aria-hidden className="pointer-events-none absolute inset-0 texture-dots-dark" />
       <Parallax amount={50} className="pointer-events-none absolute -top-20 right-[10%] h-[28rem] w-[28rem] glow-radial-terra" />
       <div className="container-x relative z-10">
-        <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
-          <Reveal>
-            <Pill dark>Diagnóstico gratis</Pill>
-            <h2 className="mt-4 font-display font-extrabold leading-tight text-white" style={{ fontSize: 'clamp(1.875rem, 4vw, 3rem)' }}>Descubre qué ordenar primero en tu negocio</h2>
-            <p className="mt-5 max-w-md text-white/65">En unos minutos detectamos dónde pierdes tiempo o plata. Sin compromiso y sin lenguaje técnico. Lo más fácil es escribirnos por WhatsApp.</p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <a href={BRAND.whatsapp} target="_blank" rel="noopener noreferrer" className={btnPrimary('px-6 py-4')}><Icon.Whatsapp className="h-5 w-5" /> WhatsApp directo</a>
-              <a href={`mailto:${BRAND.email}`} className="inline-flex items-center justify-center gap-2 rounded-xl bg-white/10 px-6 py-4 text-sm font-bold text-white ring-1 ring-white/15 transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/15"><Icon.Mail className="h-5 w-5" /> {BRAND.email}</a>
-            </div>
-          </Reveal>
-          <Reveal delay={0.1}>
-            <form className="rounded-[24px] border border-white/10 bg-white/[0.04] p-6 backdrop-blur-sm sm:p-8" onSubmit={(e) => e.preventDefault()}>
-              <div className="space-y-5">
-                <div>
-                  <label className="mb-2 block text-xs font-medium uppercase tracking-wide text-white/50">¿Qué tipo de negocio tienes?</label>
-                  <input type="text" className="w-full rounded-xl border border-white/10 bg-brio-ink-dark/60 px-4 py-3.5 text-sm text-white placeholder-white/30 outline-none transition-colors focus:border-brio-terra" placeholder="Bodega, restaurante, tienda de ropa..." />
+        <Reveal>
+          <div className="relative overflow-hidden rounded-[30px] border border-white/10 bg-brio-ink-dark shadow-hard-lg">
+            <div className="absolute inset-0 texture-dots-dark opacity-70" />
+            <div className="absolute -left-24 -top-28 h-80 w-80 rounded-full bg-brio-plum/30 blur-3xl" />
+            <div className="absolute -bottom-28 right-10 h-96 w-96 rounded-full bg-brio-terra/20 blur-3xl" />
+            <div className="relative grid lg:grid-cols-[1.1fr_0.9fr]">
+              <div className="relative min-h-[25rem] overflow-hidden p-7 sm:p-10 lg:min-h-[30rem]">
+                <Pill dark>Diagnóstico gratis</Pill>
+                <h2 className="mt-5 max-w-xl font-display text-3xl font-black leading-tight text-white md:text-5xl">
+                  Mándanos <span className="text-gradient">un mensaje</span>
+                </h2>
+                <p className="mt-4 max-w-md text-sm leading-relaxed text-white/60 md:text-base">
+                  Dinos qué parte de tu operación te está quitando tiempo. Te respondemos con una idea concreta, sin venderte humo.
+                </p>
+
+                <div className="mt-8 flex items-center gap-3">
+                  <div className="flex -space-x-3">
+                    {founders.map((f) => (
+                      <img key={f.name} src={f.photo} alt="" loading="lazy" className="h-12 w-12 rounded-full border-2 border-brio-ink-dark object-cover" />
+                    ))}
+                  </div>
+                  <div>
+                    <p className="text-sm font-bold text-white">Respondemos en menos de 24h</p>
+                    <p className="text-xs text-white/45">Bruno, Leonardo y Simple AI, en persona.</p>
+                  </div>
                 </div>
-                <div>
-                  <label className="mb-2 block text-xs font-medium uppercase tracking-wide text-white/50">Tu WhatsApp</label>
-                  <input type="tel" className="w-full rounded-xl border border-white/10 bg-brio-ink-dark/60 px-4 py-3.5 text-sm text-white placeholder-white/30 outline-none transition-colors focus:border-brio-terra" placeholder="+51 999 999 999" />
+
+                <div className="mt-16 max-w-sm space-y-8">
+                  <a href={`mailto:${BRAND.email}`} className="group flex items-center gap-3 transition-all duration-300 hover:translate-x-1">
+                    <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-brio-plum/25 text-brio-terra ring-1 ring-white/10"><Icon.Mail className="h-4 w-4" /></span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block text-[10px] font-bold uppercase tracking-[0.16em] text-white/35">Correo</span>
+                      <span className="block truncate text-sm font-bold text-white/80 group-hover:text-white">{BRAND.email}</span>
+                    </span>
+                    <Icon.ArrowRight className="h-4 w-4 text-white/30 transition-transform group-hover:translate-x-1 group-hover:text-brio-terra" />
+                  </a>
+                  <a href={BRAND.whatsapp} target="_blank" rel="noopener noreferrer" className="group flex items-center gap-3 transition-all duration-300 hover:translate-x-1">
+                    <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#25D366]/15 text-[#25D366] ring-1 ring-white/10"><Icon.Whatsapp className="h-4 w-4" /></span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block text-[10px] font-bold uppercase tracking-[0.16em] text-white/35">WhatsApp</span>
+                      <span className="block text-sm font-bold text-white/80 group-hover:text-white">+51 991 735 542</span>
+                    </span>
+                    <Icon.ArrowRight className="h-4 w-4 text-white/30 transition-transform group-hover:translate-x-1 group-hover:text-brio-terra" />
+                  </a>
                 </div>
-                <div>
-                  <label className="mb-2 block text-xs font-medium uppercase tracking-wide text-white/50">¿Qué es lo que más tiempo te quita?</label>
-                  <textarea rows={3} className="w-full resize-none rounded-xl border border-white/10 bg-brio-ink-dark/60 px-4 py-3.5 text-sm text-white placeholder-white/30 outline-none transition-colors focus:border-brio-terra" placeholder="Cuéntanos en una línea..." />
-                </div>
-                <button type="submit" className={btnPrimary('mt-1 w-full')}>Hacer mi diagnóstico <Icon.ArrowRight className="h-4 w-4" /></button>
+
+                <motion.img
+                  src={witchImage}
+                  alt="Asistente Simple AI"
+                  className="pointer-events-none absolute -bottom-10 right-0 w-52 opacity-95 drop-shadow-[0_30px_45px_rgba(245,225,78,0.22)] sm:w-64 lg:right-2 lg:w-72"
+                  animate={{ y: [0, -12, 0], rotate: [-1, 1, -1] }}
+                  transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+                />
               </div>
-            </form>
-          </Reveal>
-        </div>
+
+              <div className="relative border-t border-white/10 p-7 sm:p-10 lg:border-l lg:border-t-0">
+                <form className="mx-auto max-w-md rounded-[28px] border border-white/10 bg-white/[0.04] p-6 shadow-hard-lg backdrop-blur-sm sm:p-8" onSubmit={(e) => e.preventDefault()}>
+                  <div className="space-y-6">
+                    <div>
+                      <label className="mb-3 block text-xs font-bold uppercase tracking-[0.12em] text-white/45">¿Qué tipo de negocio tienes?</label>
+                      <input type="text" className="w-full rounded-2xl border border-white/10 bg-brio-ink-dark/70 px-5 py-5 text-base font-semibold text-white placeholder-white/25 outline-none transition-colors focus:border-brio-terra" placeholder="Bodega, restaurante, tienda de ropa..." />
+                    </div>
+                    <div>
+                      <label className="mb-3 block text-xs font-bold uppercase tracking-[0.12em] text-white/45">Tu WhatsApp</label>
+                      <input type="tel" className="w-full rounded-2xl border border-white/10 bg-brio-ink-dark/70 px-5 py-5 text-base font-semibold text-white placeholder-white/25 outline-none transition-colors focus:border-brio-terra" placeholder="+51 999 999 999" />
+                    </div>
+                    <button type="submit" className={btnPrimary('mt-24 w-full py-5 text-base')}>
+                      Hacer mi diagnóstico <Icon.ArrowRight className="h-4 w-4" />
+                    </button>
+                  </div>
+                </form>
+                <div className="mx-auto mt-5 max-w-md">
+                  <div className="mb-5 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.16em] text-white/35">
+                    <span className="h-px flex-1 bg-white/10" />
+                    <span>o</span>
+                    <span className="h-px flex-1 bg-white/10" />
+                  </div>
+                  <div className="flex justify-center">
+                    <a href={BRAND.whatsapp} target="_blank" rel="noopener noreferrer" className="inline-flex w-fit items-center justify-center gap-2 rounded-2xl bg-[#1DB954] px-6 py-3.5 text-sm font-black text-white shadow-[0_22px_45px_-28px_rgba(29,185,84,0.9)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#19a84c] active:scale-[0.98]">
+                      <Icon.Whatsapp className="h-5 w-5" /> Escríbenos por WhatsApp
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Reveal>
       </div>
     </section>
   )
@@ -873,26 +997,53 @@ function FounderAvatar({ photo, initials, ring }: { photo: string; initials: str
 /* ------------------------------------------------------------------ */
 function Team() {
   return (
-    <section id="equipo" className="section-padding bg-brio-bone scroll-mt-20">
-      <div className="container-x">
-        <Reveal className="mb-12 max-w-2xl">
+    <section id="equipo" className="section-padding relative overflow-hidden bg-brio-bone scroll-mt-20 texture-dots">
+      <div className="absolute -top-40 right-[-8rem] h-[30rem] w-[30rem] rounded-full bg-brio-terra/20 blur-3xl" />
+      <div className="absolute -bottom-40 left-[-8rem] h-[26rem] w-[26rem] rounded-full bg-brio-plum/10 blur-3xl" />
+      <div className="container-x relative z-10">
+        <Reveal className="mx-auto mb-14 max-w-3xl text-center">
           <Pill>Nosotros</Pill>
-          <h2 className="mt-4 text-fluid-section font-bold leading-tight text-brio-ink">Gente que entra a tu operación y resuelve contigo</h2>
-          <p className="mt-4 max-w-xl text-brio-slate">Hablamos como socio operativo, no como proveedor técnico. Negocio y tecnología en la misma mesa.</p>
+          <h2 className="mt-4 text-fluid-section font-black leading-tight tracking-tight text-brio-ink">
+            Gente que entra a tu operación
+            <span className="block text-brio-plum">y resuelve contigo.</span>
+          </h2>
+          <p className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-brio-slate md:text-lg">
+            Hablamos como socio operativo, no como proveedor técnico. Negocio y tecnología en la misma mesa.
+          </p>
+          <div className="mx-auto mt-7 flex max-w-2xl flex-wrap justify-center gap-2">
+            {['operación real', 'IA aplicada', 'ventas', 'automatización'].map((tag) => (
+              <span key={tag} className="rounded-full border border-brio-border bg-white px-4 py-2 text-xs font-bold uppercase tracking-[0.12em] text-brio-plum shadow-hard-sm">
+                {tag}
+              </span>
+            ))}
+          </div>
         </Reveal>
-        <Stagger className="mx-auto grid max-w-3xl grid-cols-1 gap-6 sm:grid-cols-2">
-          {founders.map((f) => (
-            <StaggerItem key={f.name}>
-              <div className="flex h-full flex-col items-center rounded-[20px] border border-brio-border bg-white p-8 text-center shadow-hard-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-hard-lg">
-                <FounderAvatar photo={f.photo} initials={f.initials} ring={f.ring} />
-                <h3 className="mt-6 text-xl font-bold text-brio-ink">{f.name}</h3>
-                <p className="mt-1 font-mono text-xs font-medium uppercase tracking-[0.14em] text-brio-plum">{f.role}</p>
-                <p className="mt-4 max-w-xs text-sm leading-relaxed text-brio-slate">{f.bio}</p>
-                <a href="#" aria-label={`LinkedIn de ${f.name}`} className="mt-5 inline-flex h-9 w-9 items-center justify-center rounded-full border border-brio-border text-brio-slate/60 transition-colors hover:border-brio-plum hover:text-brio-plum"><Icon.Linkedin className="h-4 w-4" /></a>
-              </div>
-            </StaggerItem>
-          ))}
-        </Stagger>
+
+        <div className="relative mx-auto max-w-5xl">
+          <div className="absolute left-1/2 top-1/2 hidden h-44 w-[72%] -translate-x-1/2 -translate-y-1/2 rounded-full border border-dashed border-brio-plum/20 md:block" />
+          <Stagger className="grid gap-6 sm:grid-cols-2">
+            {founders.map((f, i) => (
+              <StaggerItem key={f.name} className={i === 1 ? 'sm:translate-y-8' : ''}>
+                <Tilt strength={5} className="h-full">
+                  <div className="group relative flex h-full min-h-[24rem] flex-col overflow-hidden rounded-[30px] border border-brio-border bg-white p-7 text-center shadow-hard-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-hard-lg">
+                    <div className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-brio-terra via-brio-plum to-brio-terra opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                    <span className="absolute -right-4 -top-7 font-mono text-[8rem] font-black leading-none text-brio-ink/[0.035]">{f.initials}</span>
+                    <div className="relative mx-auto rounded-full bg-gradient-to-br from-brio-terra/35 via-white to-brio-plum/20 p-2 shadow-hard-lg transition-transform duration-300 group-hover:scale-105">
+                      <FounderAvatar photo={f.photo} initials={f.initials} ring={f.ring} />
+                    </div>
+                    <h3 className="relative mt-6 text-2xl font-black tracking-tight text-brio-ink">{f.name}</h3>
+                    <p className="relative mt-2 font-mono text-xs font-bold uppercase tracking-[0.18em] text-brio-plum">{f.role}</p>
+                    <p className="relative mt-5 flex-1 text-sm leading-relaxed text-brio-slate">{f.bio}</p>
+                    <div className="relative mt-6 flex items-center justify-center gap-3 border-t border-brio-border pt-5">
+                      <span className="rounded-full bg-brio-muted px-3 py-1.5 text-[11px] font-bold text-brio-ink">hands-on</span>
+                      <a href="#" aria-label={`LinkedIn de ${f.name}`} className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-brio-border text-brio-slate/60 transition-all duration-300 hover:border-brio-plum hover:text-brio-plum hover:-translate-y-0.5"><Icon.Linkedin className="h-4 w-4" /></a>
+                    </div>
+                  </div>
+                </Tilt>
+              </StaggerItem>
+            ))}
+          </Stagger>
+        </div>
       </div>
     </section>
   )
