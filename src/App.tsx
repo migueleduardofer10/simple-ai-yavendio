@@ -112,9 +112,9 @@ const Icon = {
 /* ------------------------------------------------------------------ */
 const NAV = [
   { label: 'Inicio', to: '/' },
-  { label: 'Qué resolvemos', to: '/resolvemos' },
-  { label: 'Cómo trabajamos', to: '/como-trabajamos' },
+  { label: 'Resolvemos', to: '/resolvemos' },
   { label: 'Casos', to: '/casos' },
+  { label: 'Nosotros', to: '/nosotros' },
 ]
 
 function ScrollToTop() {
@@ -297,23 +297,43 @@ function Header() {
             Hablemos
           </a>
         </div>
-        <button aria-label="Abrir menú" className={`md:hidden -m-2.5 p-2.5 ${overHero ? 'text-white' : 'text-brio-ink'}`} onClick={() => setOpen((v) => !v)}>
-          {open ? <Icon.Close className="h-6 w-6" /> : <Icon.Menu className="h-6 w-6" />}
-        </button>
+        {!open && (
+          <button aria-label="Abrir menú" className={`md:hidden -m-2.5 p-2.5 ${overHero ? 'text-white' : 'text-brio-ink'}`} onClick={() => setOpen(true)}>
+            <Icon.Menu className="h-6 w-6" />
+          </button>
+        )}
       </div>
       <AnimatePresence>
         {open && (
-          <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} className="md:hidden container-x mt-3">
-            <div className="rounded-2xl border border-brio-border bg-white p-4 shadow-hard-lg">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-x-0 top-0 z-50 flex flex-col bg-white shadow-hard-lg md:hidden"
+          >
+            {/* Header del menú */}
+            <div className="flex items-center justify-between px-5 py-4 border-b border-brio-border">
+              <Logo dark={false} />
+              <button aria-label="Cerrar menú" onClick={() => setOpen(false)} className="text-brio-ink -m-2 p-2">
+                <Icon.Close className="h-6 w-6" />
+              </button>
+            </div>
+
+            {/* Links */}
+            <nav className="flex flex-col px-5 py-6 gap-1 flex-1">
               {NAV.map(({ label, to }) => (
                 <NavLink key={to} to={to} end={to === '/'} onClick={() => setOpen(false)} className={({ isActive }) =>
-                  `block rounded-xl px-3 py-2.5 text-sm font-medium hover:bg-brio-muted ${isActive ? 'text-brio-plum' : 'text-brio-ink/80'}`}>
+                  `py-4 text-xl font-semibold border-b border-brio-border/50 transition-colors ${isActive ? 'text-brio-plum' : 'text-brio-ink'}`}>
                   {label}
                 </NavLink>
               ))}
-              <a href={BRAND.whatsapp} target="_blank" rel="noopener noreferrer" onClick={() => setOpen(false)} className={btnPrimary('mt-2 w-full')}>
-                <Icon.Whatsapp className="h-4 w-4" />
-                Quiero revisar mi negocio
+            </nav>
+
+            {/* CTA */}
+            <div className="px-5 pb-8 space-y-3">
+              <a href={BRAND.whatsapp} target="_blank" rel="noopener noreferrer" onClick={() => setOpen(false)} className={btnPrimary('w-full py-4 text-base justify-center')}>
+                <Icon.Whatsapp className="h-5 w-5" /> Hablemos
               </a>
             </div>
           </motion.div>
@@ -542,7 +562,33 @@ function Simplicity() {
       <div aria-hidden className="pointer-events-none absolute inset-0 texture-dots-dark" />
       <Parallax amount={60} className="pointer-events-none absolute -top-24 left-1/2 h-[34rem] w-[34rem] -translate-x-1/2 glow-radial-terra" />
       <div className="container-x relative z-10">
-        <div className="relative mx-auto min-h-[50rem] max-w-6xl md:min-h-[58rem]">
+
+        {/* MOBILE: layout apilado */}
+        <div className="md:hidden text-center">
+          <Pill dark>Lo simple gana</Pill>
+          <h2 className="mt-6 font-display font-extrabold leading-[1.08] text-white" style={{ fontSize: 'clamp(2rem, 8vw, 2.8rem)' }}>
+            No todo necesita un sistema. A veces solo hay que <span className="text-gradient">ordenar bien lo que ya usas.</span>
+          </h2>
+          <ul className="mt-8 space-y-3 text-left">
+            {simpleIdeas.map((idea) => (
+              <li key={idea.text} className="flex items-start gap-3 rounded-2xl border border-white/10 bg-white/[0.07] px-4 py-3 text-sm text-white/80 backdrop-blur-sm">
+                <Icon.Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-brio-terra" />
+                {idea.text}
+              </li>
+            ))}
+          </ul>
+          <div className="mt-6 rounded-2xl border border-brio-terra/40 bg-white/[0.07] px-4 py-3 text-sm font-bold text-center backdrop-blur-sm">
+            <span className="text-gradient">Cobramos por resolver,</span>{' '}
+            <span className="text-white/90">no por complicarte.</span>
+          </div>
+          <div className="relative mt-8 flex justify-center">
+            <div className="absolute bottom-0 left-1/2 h-64 w-64 -translate-x-1/2 rounded-full bg-brio-terra/15 blur-3xl" />
+            <img src={witchKeepingImage} alt="" className="relative w-64 drop-shadow-[0_36px_60px_rgba(245,225,78,0.18)]" />
+          </div>
+        </div>
+
+        {/* DESKTOP: layout flotante */}
+        <div className="relative mx-auto hidden min-h-[50rem] max-w-6xl md:block md:min-h-[58rem]">
           <Reveal className="relative z-20 mx-auto max-w-5xl text-center -mt-8">
             <Pill dark>Lo simple gana</Pill>
             <h2 className="relative z-20 mx-auto mt-6 max-w-4xl font-display font-extrabold leading-[1.08] text-white" style={{ fontSize: 'clamp(2.1rem, 5.1vw, 3.8rem)' }}>
@@ -879,7 +925,26 @@ function Training() {
           </p>
         </Reveal>
 
-        <Reveal className="relative mx-auto mt-2 h-[30rem] max-w-5xl sm:mt-4 sm:h-[34rem]">
+        {/* MOBILE: lista compacta */}
+        <div className="mt-8 space-y-2.5 md:hidden">
+          {trainingOrbit.map((item) => {
+            const OrbitIcon = item.icon
+            return (
+              <div key={item.label} className="flex items-center gap-4 rounded-2xl border border-white/10 bg-white/[0.07] px-4 py-3.5 backdrop-blur-sm">
+                <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-white/10 text-brio-terra">
+                  <OrbitIcon className="h-5 w-5" />
+                </span>
+                <span className="min-w-0 flex-1">
+                  <span className="block font-mono text-[10px] font-bold uppercase tracking-widest text-brio-terra">{item.label}</span>
+                  <span className="mt-0.5 block text-sm font-bold leading-snug text-white">{item.phrase}</span>
+                </span>
+              </div>
+            )
+          })}
+        </div>
+
+        {/* DESKTOP: orbit layout */}
+        <Reveal className="relative mx-auto mt-2 hidden h-[30rem] max-w-5xl md:block sm:mt-4 sm:h-[34rem]">
           <div className="absolute bottom-8 left-1/2 h-[25rem] w-[50rem] -translate-x-1/2 rounded-t-full border border-b-0 border-dashed border-white/15 sm:h-[30rem] sm:w-[62rem]" />
           <div className="absolute bottom-8 left-1/2 h-[16rem] w-[32rem] -translate-x-1/2 rounded-t-full border border-b-0 border-dashed border-white/20 sm:h-[20rem] sm:w-[42rem]" />
           <motion.div
@@ -1003,19 +1068,19 @@ function Contact() {
                   Dinos qué parte de tu operación te está quitando tiempo. Te respondemos con una idea concreta, sin venderte humo.
                 </p>
 
-                <div className="mt-8 flex items-center gap-3">
-                  <div className="flex -space-x-3">
+                <div className="mt-8 flex flex-wrap items-center gap-3">
+                  <div className="flex flex-shrink-0 -space-x-3">
                     {founders.map((f) => (
-                      <img key={f.name} src={f.photo} alt="" loading="lazy" className="h-12 w-12 rounded-full border-2 border-brio-ink-dark object-cover" />
+                      <img key={f.name} src={f.photo} alt="" loading="lazy" className="h-10 w-10 rounded-full border-2 border-brio-ink-dark object-cover" />
                     ))}
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <p className="text-sm font-bold text-white">Respondemos en menos de 24h</p>
                     <p className="text-xs text-white/45">Bruno, Leonardo y Simple AI, en persona.</p>
                   </div>
                 </div>
 
-                <div className="mt-16 max-w-sm space-y-8">
+                <div className="mt-8 max-w-sm space-y-8 sm:mt-16">
                   <a href={`mailto:${BRAND.email}`} className="group flex items-center gap-3 transition-all duration-300 hover:translate-x-1">
                     <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-brio-plum/25 text-brio-terra ring-1 ring-white/10"><Icon.Mail className="h-4 w-4" /></span>
                     <span className="min-w-0 flex-1">
@@ -1037,7 +1102,7 @@ function Contact() {
                 <motion.img
                   src={witchImage}
                   alt="Asistente Simple AI"
-                  className="pointer-events-none absolute -bottom-10 right-0 w-52 opacity-95 drop-shadow-[0_30px_45px_rgba(245,225,78,0.22)] sm:w-64 lg:right-2 lg:w-72"
+                  className="pointer-events-none absolute -bottom-10 right-0 hidden w-52 opacity-95 drop-shadow-[0_30px_45px_rgba(245,225,78,0.22)] sm:block sm:w-64 lg:right-2 lg:w-72"
                   animate={{ y: [0, -12, 0], rotate: [-1, 1, -1] }}
                   transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
                 />
