@@ -214,6 +214,22 @@ const founders = [
   { photo: '/team/founder-2.jpg', initials: 'MF', name: 'Miguel Fernández', role: 'Tecnología', bio: 'Hace que la tecnología sea simple. Herramientas que tu equipo sí usa, sin tecnicismos.', ring: 'ring-brio-plum/30 bg-brio-plum' },
 ]
 
+/* Perfiles ampliados para la página Nosotros (basados en CV real) */
+const team = [
+  {
+    photo: '/team/founder-1.png',
+    name: 'Yumi Reyes',
+    role: 'Negocio & Producto de IA',
+    bio: 'Lidera productos de IA generativa y agentes inteligentes para grandes corporaciones. CEO y fundador de Telodigo y Tripcito. Trae la visión de negocio y la obsesión por que la IA mueva plata, no solo que suene moderna.',
+  },
+  {
+    photo: '/team/founder-2.jpg',
+    name: 'Miguel Fernández',
+    role: 'Tecnología & Arquitectura',
+    bio: 'Trabaja en proyectos para Delosi, la cadena detrás de KFC y Starbucks en Perú, y viene del sector financiero de EE.UU. donde construyó plataformas que mueven pagos a escala. Arquitecto multi-cloud y full stack. Hace que la tecnología más compleja termine siendo simple de usar.',
+  },
+]
+
 const faqs = [
   { q: '¿Tengo que saber de IA para trabajar con ustedes?', a: 'No. Nuestro trabajo es traducir la tecnología a soluciones simples. Tú nos explicas cómo trabajas; nosotros vemos cómo simplificarlo.' },
   { q: '¿Me van a cambiar todo mi sistema?', a: 'No. Primero revisamos lo que ya usas. Si WhatsApp, Excel o Google Sheets resuelven bien con mejoras, empezamos por ahí.' },
@@ -1276,6 +1292,259 @@ function FloatingWhatsApp() {
   )
 }
 
+/* ================================================================== */
+/*  PÁGINA NOSOTROS                                                     */
+/* ================================================================== */
+
+
+const principles = [
+  { n: '01', icon: Icon.Store, title: 'Empezamos por el negocio', body: 'Antes de tocar tecnología entendemos cómo vendes, cobras y atiendes. La herramienta viene después, no al revés.' },
+  { n: '02', icon: Icon.Sparkles, title: 'Lo simple gana', body: 'Si una hoja de cálculo o WhatsApp resuelve, lo mejoramos. No construimos sistemas gigantes que nadie en tu equipo va a usar.' },
+  { n: '03', icon: Icon.Cash, title: 'Cobramos por resolver', body: 'No por complicarte. Si no movemos una métrica real de tu negocio, no hicimos nuestro trabajo. Así de claro.' },
+  { n: '04', icon: Icon.Chat, title: 'Tu equipo en el centro', body: 'La mejor IA es la que tu gente usa todos los días. Capacitamos con tus casos reales, no con teoría de manual.' },
+]
+
+const contrastRows = [
+  { no: 'Una agencia que te vende humo con la palabra "IA".', si: 'Un socio operativo que se mete a resolver contigo.' },
+  { no: 'Un sistema enorme que nadie en tu equipo va a usar.', si: 'Herramientas simples conectadas a tu día a día.' },
+  { no: 'Tecnicismos, reuniones eternas y proyectos sin fin.', si: 'Una mejora concreta y visible en semanas.' },
+]
+
+function AboutHero() {
+  return (
+    <section className="relative overflow-hidden bg-brio-ink-dark pt-28 pb-0 md:pt-36">
+      {/* Glow central fuerte */}
+      <div aria-hidden className="pointer-events-none absolute inset-0">
+        <div className="absolute left-1/2 top-0 h-[40rem] w-[60rem] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[120px]"
+             style={{ background: 'radial-gradient(ellipse, rgba(138,46,146,0.45) 0%, transparent 70%)' }} />
+        <div className="absolute inset-0 texture-dots-dark opacity-30" />
+      </div>
+
+      {/* Titular centrado — enorme */}
+      <div className="container-x relative z-10 pb-14 text-center md:pb-20">
+        <Reveal>
+          <Pill dark><span className="h-1.5 w-1.5 rounded-full bg-brio-terra" /> Nosotros</Pill>
+        </Reveal>
+        <Reveal delay={0.06}>
+          <h1 className="mx-auto mt-6 max-w-5xl font-black tracking-[-0.03em] text-white"
+              style={{ fontSize: 'clamp(3rem, 8vw, 6.5rem)', lineHeight: 1.0 }}>
+            No vendemos IA.<br />
+            <span className="text-gradient">Ordenamos tu negocio.</span>
+          </h1>
+        </Reveal>
+        <Reveal delay={0.1}>
+          <p className="mx-auto mt-7 max-w-lg text-base leading-relaxed text-white/50 md:text-xl">
+            Entramos a tu operación real y la dejamos funcionando mejor.<br className="hidden md:block" />
+            A veces con IA. A veces con una hoja de cálculo bien hecha.
+          </p>
+        </Reveal>
+        <Reveal delay={0.15}>
+          <div className="mt-9 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+            <a href={BRAND.whatsapp} target="_blank" rel="noopener noreferrer" className={btnPrimary('px-8 py-4 text-base')}>
+              <Icon.Whatsapp className="h-5 w-5" /> Hablemos con el equipo
+            </a>
+            <Link to="/" className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/[0.06] px-7 py-4 text-sm font-bold text-white backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/10 md:text-base">
+              Ver lo que hacemos <Icon.ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+        </Reveal>
+      </div>
+
+      {/* Métricas — franja inferior elegante, todo en terra */}
+      <div className="relative z-10 border-t border-white/10 bg-white/[0.02]">
+        <div className="container-x grid grid-cols-1 divide-y divide-white/10 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+          {[
+            { to: 24, suffix: 'h', label: 'Te respondemos en menos de' },
+            { to: 3,  suffix: '',  label: 'Frentes: IA · automatización · digital' },
+            { to: 0,  suffix: '',  label: 'Tecnicismos. Cero humo.' },
+          ].map((m, i) => (
+            <Reveal key={m.label} delay={0.1 + i * 0.08}>
+              <div className="flex flex-col items-center py-10 text-center md:py-14">
+                <div style={{ fontSize: 'clamp(3.5rem, 7vw, 5.5rem)', lineHeight: 1 }}>
+                  <Counter to={m.to} suffix={m.suffix} className="font-black text-brio-terra" />
+                </div>
+                <p className="mt-2 text-xs font-semibold uppercase tracking-widest text-white/35 md:text-sm">{m.label}</p>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function AboutPrinciples() {
+  return (
+    <section className="relative overflow-hidden bg-brio-bone">
+      <div aria-hidden className="pointer-events-none absolute inset-0 texture-dots" />
+
+      {/* Header */}
+      <div className="container-x relative z-10 pb-12 pt-16 md:pt-24">
+        <Reveal className="max-w-2xl">
+          <Pill>Cómo pensamos</Pill>
+          <h2 className="mt-4 font-bold leading-[1.1] text-brio-ink" style={{ fontSize: 'clamp(1.9rem, 5vw, 3.2rem)' }}>
+            Cuatro reglas que no <span className="text-brio-plum">negociamos</span>
+          </h2>
+        </Reveal>
+      </div>
+
+      {/* Filas editoriales */}
+      <div className="relative z-10 border-t border-brio-border">
+        {principles.map((p, i) => {
+          const PIcon = p.icon
+          const isEven = i % 2 === 0
+          return (
+            <Reveal key={p.n} delay={i * 0.05}>
+              <div className="group border-b border-brio-border transition-colors duration-500 hover:bg-brio-ink">
+                <div className="container-x flex flex-col gap-6 py-8 md:flex-row md:items-center md:gap-10 md:py-10">
+                  {/* Número */}
+                  <span className="flex-shrink-0 font-black leading-none text-brio-ink/[0.08] transition-colors duration-500 group-hover:text-white/[0.07]" style={{ fontSize: 'clamp(4.5rem, 9vw, 7rem)' }}>
+                    {p.n}
+                  </span>
+                  {/* Icono + Título */}
+                  <div className="flex-shrink-0 md:w-60">
+                    <span className={`flex h-10 w-10 items-center justify-center rounded-xl transition-all duration-300 ${isEven ? 'bg-brio-terra/15 text-brio-terra group-hover:bg-brio-terra group-hover:text-brio-ink' : 'bg-brio-plum/15 text-brio-plum group-hover:bg-brio-plum group-hover:text-white'}`}>
+                      <PIcon className="h-5 w-5" />
+                    </span>
+                    <h3 className="mt-3 text-xl font-black tracking-tight text-brio-ink transition-colors duration-500 group-hover:text-white md:text-2xl">
+                      {p.title}
+                    </h3>
+                  </div>
+                  {/* Separador vertical desktop */}
+                  <div className="hidden h-16 w-px flex-shrink-0 bg-brio-border transition-colors duration-500 group-hover:bg-white/10 md:block" />
+                  {/* Texto */}
+                  <p className="flex-1 text-base leading-relaxed text-brio-slate transition-colors duration-500 group-hover:text-white/55 md:text-lg">
+                    {p.body}
+                  </p>
+                </div>
+              </div>
+            </Reveal>
+          )
+        })}
+      </div>
+    </section>
+  )
+}
+
+function AboutContrast() {
+  return (
+    <section className="relative overflow-hidden bg-brio-muted">
+      <div aria-hidden className="pointer-events-none absolute inset-0 texture-dots" />
+
+      {/* Header */}
+      <div className="container-x relative z-10 pb-12 pt-16 text-center md:pt-24">
+        <Reveal>
+          <Pill>Para que quede claro</Pill>
+          <h2 className="mt-4 font-bold leading-[1.1] text-brio-ink" style={{ fontSize: 'clamp(1.9rem, 5vw, 3.2rem)' }}>
+            Lo que <span className="text-brio-ink/25 line-through decoration-2">no</span> somos.{' '}
+            <span className="text-brio-plum">Y lo que sí.</span>
+          </h2>
+        </Reveal>
+      </div>
+
+      {/* Filas editoriales */}
+      <div className="relative z-10 border-t border-brio-border pb-16 md:pb-24">
+        {contrastRows.map((r, i) => (
+          <Reveal key={i} delay={i * 0.05}>
+            <div className="group border-b border-brio-border transition-colors duration-500 hover:bg-brio-ink/[0.02]">
+              <div className="container-x grid grid-cols-1 gap-6 py-8 md:grid-cols-2 md:gap-0 md:py-10">
+                {/* NO */}
+                <div className="flex items-start gap-4 md:pr-12">
+                  <span className="mt-1 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-brio-ink/[0.07] text-brio-ink/30">
+                    <Icon.Close className="h-3 w-3" />
+                  </span>
+                  <p className="text-base leading-relaxed text-brio-ink/30 line-through decoration-brio-ink/15 md:text-lg">{r.no}</p>
+                </div>
+                {/* SÍ */}
+                <div className="flex items-start gap-4 md:border-l md:border-brio-border md:pl-12">
+                  <span className="mt-1 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-brio-plum/10 text-brio-plum">
+                    <Icon.Check className="h-3 w-3" />
+                  </span>
+                  <p className="text-base font-bold leading-relaxed text-brio-ink md:text-lg">{r.si}</p>
+                </div>
+              </div>
+            </div>
+          </Reveal>
+        ))}
+      </div>
+    </section>
+  )
+}
+
+function AboutTeam() {
+  return (
+    <section className="relative overflow-hidden bg-brio-ink">
+      <div aria-hidden className="pointer-events-none absolute inset-0 texture-dots-dark" />
+
+      {/* Header */}
+      <div className="container-x relative z-10 pb-10 pt-16 text-center md:pb-16 md:pt-24">
+        <Reveal>
+          <span className="text-xs font-black uppercase tracking-[0.25em] text-brio-terra">El equipo</span>
+          <h2 className="mt-4 font-black leading-[1.08] text-white" style={{ fontSize: 'clamp(2rem, 5vw, 3.4rem)' }}>
+            Dos perfiles que <span className="text-brio-plum">no deberían caber</span> en una pyme.
+          </h2>
+          <p className="mx-auto mt-4 max-w-lg text-base text-white/50 md:text-lg">
+            Negocio y tecnología de primer nivel, metidos de lleno en tu operación.
+          </p>
+        </Reveal>
+      </div>
+
+      {/* Editorial rows */}
+      <div className="relative z-10">
+        {team.map((m, i) => (
+          <Reveal key={m.name} delay={i * 0.05}>
+            <div className={`flex flex-col border-t border-white/10 ${i % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}>
+              {/* Photo */}
+              <div className="group relative aspect-[4/3] overflow-hidden md:aspect-auto md:min-h-[520px] md:w-[45%]">
+                <img src={m.photo} alt={m.name} className="h-full w-full object-cover object-top grayscale transition-all duration-700 group-hover:grayscale-0" />
+                <div className={`absolute inset-0 hidden md:block ${i % 2 === 0 ? 'bg-gradient-to-r from-transparent to-brio-ink/85' : 'bg-gradient-to-l from-transparent to-brio-ink/85'}`} />
+                <div className="absolute inset-0 bg-gradient-to-t from-brio-ink/75 via-transparent to-transparent md:hidden" />
+                <span className="absolute bottom-4 left-6 select-none font-black leading-none text-white/[0.06]" style={{ fontSize: 'clamp(6rem, 14vw, 10rem)' }}>
+                  0{i + 1}
+                </span>
+              </div>
+
+              {/* Text */}
+              <div className="flex flex-col justify-center px-8 py-12 md:w-[55%] md:px-16 md:py-20">
+                <span className={`text-xs font-black uppercase tracking-[0.2em] ${i % 2 === 0 ? 'text-brio-terra' : 'text-brio-plum'}`}>
+                  {m.role}
+                </span>
+                <h3 className="mt-3 font-black text-white" style={{ fontSize: 'clamp(2.2rem, 4vw, 3.8rem)', lineHeight: 1.0 }}>
+                  {m.name}
+                </h3>
+                <div className={`mt-5 h-px w-16 ${i % 2 === 0 ? 'bg-brio-terra' : 'bg-brio-plum'}`} />
+                <p className="mt-6 max-w-[38ch] leading-relaxed text-white/55" style={{ fontSize: 'clamp(0.95rem, 1.4vw, 1.1rem)' }}>
+                  {m.bio}
+                </p>
+                <a
+                  href="#"
+                  aria-label={`LinkedIn de ${m.name}`}
+                  className="mt-8 inline-flex w-fit items-center gap-2 text-sm font-bold text-white/30 transition-colors duration-200 hover:text-white"
+                >
+                  <Icon.Linkedin className="h-4 w-4" /> LinkedIn
+                </a>
+              </div>
+            </div>
+          </Reveal>
+        ))}
+      </div>
+      <div className="border-t border-white/10" />
+    </section>
+  )
+}
+
+function Nosotros() {
+  return (
+    <main>
+      <AboutHero />
+      <AboutContrast />
+      <AboutTeam />
+      <AboutPrinciples />
+      <Contact />
+    </main>
+  )
+}
+
 /* ------------------------------------------------------------------ */
 /*  Páginas                                                            */
 /* ------------------------------------------------------------------ */
@@ -1322,8 +1591,8 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/resolvemos" element={<ComingSoon title="Qué resolvemos" />} />
-          <Route path="/como-trabajamos" element={<ComingSoon title="Cómo trabajamos" />} />
           <Route path="/casos" element={<ComingSoon title="Casos" />} />
+          <Route path="/nosotros" element={<Nosotros />} />
           <Route path="*" element={<ComingSoon title="Página no encontrada" />} />
         </Routes>
         <Footer />
