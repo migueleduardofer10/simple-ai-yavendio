@@ -16,6 +16,9 @@ import {
 } from './motion'
 import witchImage from './assets/images/witch.png'
 import witchKeepingImage from './assets/images/witch-keeping.png'
+import photoAlonsoGil from './assets/testimonios/alonso_gil.jpg'
+import photoSuilerAltamirano from './assets/testimonios/suiler_altamirano.jpg'
+import photoJuanCarlosGutierrez from './assets/testimonios/juancarlos_gutierrez.jpg'
 
 /* ------------------------------------------------------------------ */
 /*  Marca — cambia el nombre / contacto en UN solo lugar               */
@@ -204,9 +207,9 @@ const trainingOrbit = [
 ]
 
 const testimonials = [
-  { initials: 'RQ', name: 'Rosa Quispe', business: 'Bodega · Minimarket', quote: 'Antes los pedidos de WhatsApp se me perdían. Ahora llegan ordenados y con seguimiento. Dejé de perder ventas.' },
-  { initials: 'CM', name: 'Carlos Medina', business: 'Tienda de ropa', quote: 'La IA responde tallas, precios y stock al toque. Yo solo entro a cerrar la venta.' },
-  { initials: 'LF', name: 'Lucía Fernández', business: 'Restaurante', quote: 'Cierro caja en minutos y sé qué se vendió sin sacar la calculadora. Mucho menos estrés en hora punta.' },
+  { initials: 'JG', name: 'Juan Carlos Gutiérrez', business: 'Gerente de Operaciones · Yawi', quote: 'Antes los pedidos de WhatsApp se me perdían. Ahora llegan ordenados y con seguimiento. Dejé de perder ventas.', photo: photoJuanCarlosGutierrez },
+  { initials: 'SA', name: 'Suiler Altarimano', business: 'CEO · Control + S.A.C.', quote: 'La IA responde tallas, precios y stock al toque. Yo solo entro a cerrar la venta.', photo: photoSuilerAltamirano },
+  { initials: 'AG', name: 'Alonso Gil', business: 'CEO · CorAll', quote: 'Cierro caja en minutos y sé qué se vendió sin sacar la calculadora. Mucho menos estrés en hora punta.', photo: photoAlonsoGil },
 ]
 
 const founders = [
@@ -1023,16 +1026,19 @@ function Training() {
 /* ------------------------------------------------------------------ */
 /*  9 — TESTIMONIOS (marquee de cards)                                */
 /* ------------------------------------------------------------------ */
-function TestimonialCard({ initials, name, business, quote }: typeof testimonials[number]) {
+function TestimonialCard({ initials, name, business, quote, photo }: typeof testimonials[number]) {
   return (
-    <div className="mx-2.5 flex w-[20rem] flex-col rounded-[20px] border border-brio-border bg-white p-6 shadow-hard-sm sm:w-[24rem]">
-      <span className="mb-4 text-sm tracking-wide text-brio-terra">★★★★★</span>
-      <p className="flex-1 text-sm leading-relaxed text-brio-ink md:text-base">“{quote}”</p>
-      <div className="mt-6 flex items-center gap-3 border-t border-brio-border pt-4">
-        <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-brio-plum/10 text-xs font-bold text-brio-plum">{initials}</span>
-        <span className="leading-tight">
-          <span className="block text-sm font-bold text-brio-ink">{name}</span>
-          <span className="block text-xs text-brio-slate">{business}</span>
+    <div className={'mx-2.5 flex w-[20rem] flex-col rounded-[20px] border border-brio-border bg-white p-6 shadow-hard-sm sm:w-[24rem]'}>
+      <span className={'mb-4 text-sm tracking-wide text-brio-terra'}>{'★★★★★'}</span>
+      <p className={'flex-1 text-sm leading-relaxed text-brio-ink md:text-base'}>{'”'}{quote}{'”'}</p>
+      <div className={'mt-6 flex items-center gap-3 border-t border-brio-border pt-4'}>
+        {photo
+          ? <img src={photo} alt={name} className={'h-10 w-10 flex-shrink-0 rounded-full object-cover'} />
+          : <span className={'flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-brio-plum/10 text-xs font-bold text-brio-plum'}>{initials}</span>
+        }
+        <span className={'leading-tight'}>
+          <span className={'block text-sm font-bold text-brio-ink'}>{name}</span>
+          <span className={'block text-xs text-brio-slate'}>{business}</span>
         </span>
       </div>
     </div>
