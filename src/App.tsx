@@ -343,7 +343,7 @@ function Header() {
             <nav className="flex flex-col px-5 py-6 gap-1 flex-1">
               {NAV.map(({ label, to }) => (
                 <NavLink key={to} to={to} end={to === '/'} onClick={() => setOpen(false)} className={({ isActive }) =>
-                  `py-4 text-xl font-semibold border-b border-brio-border/50 transition-colors ${isActive ? 'text-brio-plum' : 'text-brio-ink'}`}>
+                  `py-4 text-xl font-medium border-b border-brio-border/50 transition-colors ${isActive ? 'text-brio-plum' : 'text-brio-ink'}`}>
                   {label}
                 </NavLink>
               ))}
@@ -354,6 +354,9 @@ function Header() {
               <a href={BRAND.whatsapp} target="_blank" rel="noopener noreferrer" onClick={() => setOpen(false)} className={btnPrimary('w-full py-4 text-base justify-center')}>
                 <Icon.Whatsapp className="h-5 w-5" /> Hablemos
               </a>
+              <button onClick={() => setOpen(false)} className="w-full rounded-xl border border-brio-border py-3.5 text-sm font-medium text-brio-slate transition-colors hover:border-brio-plum hover:text-brio-plum">
+                Switch to English
+              </button>
             </div>
           </motion.div>
         )}
